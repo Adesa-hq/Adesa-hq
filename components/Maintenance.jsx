@@ -57,8 +57,12 @@ export default function Maintenance() {
 
         {/* Actions */}
         <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
-        
-
+          <Link
+            href="/"
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-amber-500 px-6 text-sm font-semibold text-white transition-colors hover:bg-amber-600 sm:w-auto"
+          >
+            Go Home
+          </Link>
           <button
             onClick={() => window.location.reload()}
             className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-zinc-300 bg-transparent px-6 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 sm:w-auto"
@@ -79,8 +83,6 @@ export default function Maintenance() {
             Refresh
           </button>
         </div>
-
-  
 
         {/* Footer */}
         <footer className="mt-8 flex items-center gap-2 text-xs text-zinc-400 dark:text-zinc-600">
