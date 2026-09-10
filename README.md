@@ -34,3 +34,18 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Search Engine Verification
+
+The site emits verification metadata when the corresponding environment variable is set:
+
+```text
+GOOGLE_SITE_VERIFICATION=
+BING_SITE_VERIFICATION=
+YAHOO_SITE_VERIFICATION=
+YANDEX_SITE_VERIFICATION=
+PINTEREST_SITE_VERIFICATION=
+FACEBOOK_DOMAIN_VERIFICATION=
+```
+
+Add only the verification token supplied by each platform. Canonical route data, social metadata, structured data, `robots.txt`, `sitemap.xml`, and `llms.txt` are generated from `config/seo.js`.

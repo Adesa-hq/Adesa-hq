@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "../ui/logo";
+import { ACTIVE_SUBSIDIARIES } from "@/config/brand";
 
 const navigation = [
   { name: "About", href: "/about" },
@@ -14,212 +15,166 @@ const navigation = [
   {
     name: "Subsidiaries",
     href: "/subsidiaries",
-    children: [
-      { name: "Adesa Media", href: "https://www.adesamedia.com/" },
-      { name: "Adesa Energy", href: "https://www.adesaenergy.com/" },
-    ],
+    children: ACTIVE_SUBSIDIARIES.map(({ name, href }) => ({ name, href })),
   },
   { name: "Governance", href: "/governance" },
   { name: "Careers", href: "/careers" },
 ];
 
 export function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [showSubsidiaries, setShowSubsidiaries] = useState(false);
   const pathname = usePathname();
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setOpenDropdown(null);
-  }, [pathname]);
+    document.body.dataset.menuOpen = String(isMobileMenuOpen);
+    const handleEscape = (event) => {
+      if (event.key === "Escape") setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => {
+      delete document.body.dataset.menuOpen;
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [isMobileMenuOpen]);
 
   return (
-    <header className="fixed top-6 left-0 right-0 z-50 flex justify-center pointer-events-none">
-      <motion.div
-        initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className={cn(
-          "pointer-events-auto w-[92%] max-w-7xl transition-all duration-500",
-          isScrolled ? "scale-[0.98]" : "scale-100",
-        )}
-      >
-        <div className="relative rounded-2xl border border-adesa-700/60 bg-adesa-900/80 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-gold-400 to-transparent" />
+    <header
+      className="fixed inset-x-0 top-0 px-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6"
+      style={{ zIndex: "var(--layer-navigation)" }}
+    >
+      <div className="adesa-shell-surface mx-auto max-w-[86rem] rounded-2xl">
+        <nav className="flex h-16 items-center justify-between gap-4 px-3 sm:px-5" aria-label="Main navigation">
+          <Link href="/" className="group flex min-w-0 items-center gap-3" aria-label="ADESA HQ home">
+            <Logo variant="secondary" width={42} height={42} priority />
+            <span className="min-w-0 font-serif text-lg font-medium text-adesa-50 sm:text-xl">
+              ADESA <span className="font-sans text-xs font-semibold tracking-[0.18em] text-gold-400">HQ</span>
+            </span>
+          </Link>
 
-          <nav
-            className="flex h-20 items-center justify-between px-8"
-            aria-label="Main navigation"
-          >
-            <Link
-              href="/"
-              className="flex items-center gap-3"
-              aria-label="ADESA HQ Home"
-            >
-              <Logo />
-            </Link>
-
-            <ul className="hidden lg:flex items-center gap-10">
-              {navigation.map((item) => (
-                <li
-                  key={item.name}
-                  className="relative"
-                  onMouseEnter={() =>
-                    item.children && setOpenDropdown(item.name)
-                  }
-                  onMouseLeave={() => setOpenDropdown(null)}
+          <ul className="hidden items-center gap-4 lg:flex xl:gap-7">
+            {navigation.map((item) => (
+              <li key={item.name} className="group relative">
+                <Link
+                  href={item.href}
+                  className={cn(
+                    "flex h-11 items-center gap-1 whitespace-nowrap text-xs font-semibold text-adesa-200 transition-colors duration-200 hover:text-adesa-50",
+                    (pathname === item.href || pathname.startsWith(`${item.href}/`)) && "text-gold-300",
+                  )}
                 >
-                  <Link
-                    href={item.href}
-                    className={cn(
-                      "flex items-center gap-1 text-sm tracking-wide transition-colors",
-                      pathname === item.href ||
-                        pathname.startsWith(item.href + "/")
-                        ? "text-adesa-100"
-                        : "text-adesa-300 hover:text-gold-400",
-                    )}
-                    aria-haspopup={item.children ? "true" : undefined}
-                    aria-expanded={
-                      item.children ? openDropdown === item.name : undefined
-                    }
-                  >
-                    {item.name}
-                    {item.children && (
-                      <ChevronDown
-                        className={cn(
-                          "h-4 w-4 transition-transform",
-                          openDropdown === item.name && "rotate-180",
-                        )}
-                      />
-                    )}
-                  </Link>
+                  {item.name}
+                  {item.children && <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />}
+                </Link>
 
-                  {item.children && openDropdown === item.name && (
-                    <AnimatePresence>
-                      <motion.ul
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 12 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute left-0 top-full pt-4 w-56 rounded-xl border border-adesa-700 bg-adesa-800/95 backdrop-blur-xl shadow-2xl"
+                {item.children && (
+                  <ul className="invisible absolute left-1/2 top-full w-64 -translate-x-1/2 translate-y-1 rounded-xl border border-white/10 bg-adesa-900 p-2 opacity-0 shadow-[0_18px_50px_rgba(1,5,14,0.45)] transition-[opacity,transform,visibility] duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                    {item.children.map((child) => (
+                      <li key={child.name}>
+                        <Link
+                          href={child.href}
+                          target={child.href.startsWith("http") ? "_blank" : undefined}
+                          rel={child.href.startsWith("http") ? "noreferrer" : undefined}
+                          className="block rounded-lg px-3 py-2.5 text-sm text-adesa-200 transition-colors duration-200 hover:bg-white/5 hover:text-gold-300"
+                        >
+                          {child.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+
+          <Link
+            href="/contact"
+            className="hidden min-h-10 items-center gap-2 whitespace-nowrap rounded-full bg-gold-400 px-5 text-xs font-semibold text-adesa-950 transition-[background-color,transform] duration-150 hover:bg-gold-300 active:translate-y-px lg:inline-flex"
+          >
+            Contact HQ
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </Link>
+
+          <button
+            type="button"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/12 text-adesa-100 transition-colors duration-200 hover:border-gold-400 hover:text-gold-300 lg:hidden"
+            onClick={() => setIsMobileMenuOpen((open) => !open)}
+            aria-label={isMobileMenuOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-navigation"
+          >
+            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </nav>
+      </div>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.nav
+            id="mobile-navigation"
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, transform: "translateY(-10px)" }}
+            animate={{ opacity: 1, transform: "translateY(0)" }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, transform: "translateY(-10px)" }}
+            transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
+            className="adesa-shell-surface mx-auto mt-2 max-h-[calc(100dvh-6rem-env(safe-area-inset-bottom))] max-w-[86rem] overflow-y-auto overscroll-contain rounded-2xl px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 lg:hidden"
+            aria-label="Mobile navigation"
+          >
+            <ul>
+              {navigation.map((item) => (
+                <li key={item.name} className="border-b border-white/8 last:border-0">
+                  <div className="flex items-center">
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={cn(
+                        "flex min-h-14 flex-1 items-center text-base font-medium text-adesa-100",
+                        pathname === item.href && "text-gold-300",
+                      )}
+                    >
+                      {item.name}
+                    </Link>
+                    {item.children && (
+                      <button
+                        type="button"
+                        className="flex h-11 w-11 items-center justify-center rounded-full text-adesa-200"
+                        onClick={() => setShowSubsidiaries((open) => !open)}
+                        aria-label="Toggle subsidiary links"
+                        aria-expanded={showSubsidiaries}
                       >
-                        {item.children.map((child) => (
-                          <li key={child.name}>
-                            <Link
-                              href={child.href}
-                              target={
-                                child.href.startsWith("http")
-                                  ? "_blank"
-                                  : undefined
-                              }
-                              rel={
-                                child.href.startsWith("http")
-                                  ? "noopener noreferrer"
-                                  : undefined
-                              }
-                              className="block px-5 py-3 text-sm text-adesa-300 hover:text-gold-400 hover:bg-adesa-700/60 transition-colors"
-                            >
-                              {child.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </motion.ul>
-                    </AnimatePresence>
+                        <ChevronDown className={cn("h-5 w-5 transition-transform duration-200", showSubsidiaries && "rotate-180")} />
+                      </button>
+                    )}
+                  </div>
+                  {item.children && showSubsidiaries && (
+                    <ul className="mb-3 border-l border-gold-400/35 pl-4">
+                      {item.children.map((child) => (
+                        <li key={child.name}>
+                          <Link
+                            href={child.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            target={child.href.startsWith("http") ? "_blank" : undefined}
+                            rel={child.href.startsWith("http") ? "noreferrer" : undefined}
+                            className="flex min-h-11 items-center text-sm text-adesa-300 hover:text-gold-300"
+                          >
+                            {child.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </li>
               ))}
             </ul>
-
-            <div className="hidden lg:block">
-              <Link
-                href="/contact"
-                className="relative inline-flex items-center px-6 py-2.5 text-sm font-medium text-adesa-900 bg-gold-400 rounded-full hover:bg-gold-300 transition-colors"
-              >
-                Contact
-              </Link>
-            </div>
-
-            <button
-              className="lg:hidden text-adesa-100"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label="Toggle menu"
-              aria-expanded={isMobileMenuOpen}
+            <Link
+              href="/contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="mt-5 flex min-h-12 items-center justify-center rounded-full bg-gold-400 px-6 text-sm font-semibold text-adesa-950"
             >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </nav>
-
-          <AnimatePresence>
-            {isMobileMenuOpen && (
-              <motion.nav
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.25 }}
-                className="lg:hidden overflow-hidden border-t border-adesa-700 bg-adesa-900"
-                aria-label="Mobile navigation"
-              >
-                <ul className="px-8 py-6 space-y-4">
-                  {navigation.map((item) => (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        className="block text-base text-adesa-200 hover:text-gold-400 transition-colors"
-                      >
-                        {item.name}
-                      </Link>
-                      {item.children && (
-                        <ul className="pl-4 mt-2 space-y-2">
-                          {item.children.map((child) => (
-                            <li key={child.name}>
-                              <Link
-                                href={child.href}
-                                target={
-                                  child.href.startsWith("http")
-                                    ? "_blank"
-                                    : undefined
-                                }
-                                rel={
-                                  child.href.startsWith("http")
-                                    ? "noopener noreferrer"
-                                    : undefined
-                                }
-                                className="block text-sm text-adesa-400 hover:text-gold-400"
-                              >
-                                {child.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </li>
-                  ))}
-
-                  <li className="pt-4">
-                    <Link
-                      href="/contact"
-                      className="block text-center py-3 text-sm font-medium text-adesa-900 bg-gold-400 rounded-full"
-                    >
-                      Contact
-                    </Link>
-                  </li>
-                </ul>
-              </motion.nav>
-            )}
-          </AnimatePresence>
-        </div>
-      </motion.div>
+              Contact HQ
+            </Link>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

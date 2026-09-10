@@ -1,89 +1,26 @@
-"use client";
-
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
-import { motion } from "framer-motion";
-import { Send } from "lucide-react";
 
-export default function SubscribeCard({
-  title,
-  description,
-  href,
-  buttonText = "Subscribe",
-  icon = true,
-  className = "",
-}) {
-  const { newsletter } = siteConfig;
-
+export default function SubscribeCard({ buttonText = "Follow on LinkedIn", className }) {
   return (
-    <div
-      className={`
-        w-full
-        max-w-md
-        sm:max-w-lg
-        lg:max-w-xl
-        mx-auto
-        px-4
-        sm:px-6
-        ${className}
-      `}
-    >
-      <h4
-        className="
-          text-base
-          sm:text-lg
-          lg:text-xl
-          font-bold
-          text-[#FFA205]
-          mb-4
-          sm:mb-6
-          uppercase
-          tracking-widest
-          text-center
-          sm:text-left
-        "
-      >
-        {title || newsletter.title}
-      </h4>
-
-      <p
-        className="
-          text-sm
-          sm:text-base
-          text-slate-400
-          mb-6
-          sm:mb-8
-          text-center
-          sm:text-left
-          leading-relaxed
-        "
-      >
-        {description || newsletter.description}
-      </p>
-
-      <motion.a
-        href={href || newsletter.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="
-          w-full
-          bg-linear-to-r from-[#FFA205] to-[#FFC107]
-          text-[#151E47]
-          font-bold
-          py-3
-          sm:py-4
-          rounded-xl
-          hover:shadow-lg hover:shadow-orange-500/20
-          transition-all duration-300
-          flex items-center justify-center gap-2
-          text-sm
-          sm:text-base
-        "
-      >
-        {buttonText}
-        {icon && <Send size={18} />}
-      </motion.a>
-    </div>
+    <section className={cn("section-rule bg-adesa-950", className)} aria-labelledby="adesa-lens-title">
+      <div className="site-container grid gap-7 py-12 md:grid-cols-[1fr_auto] md:items-center md:py-16">
+        <div>
+          <h2 id="adesa-lens-title" className="text-3xl font-medium tracking-[-0.035em] text-adesa-50 sm:text-4xl">{siteConfig.newsletter.title}</h2>
+          <p className="mt-3 max-w-[58ch] text-base leading-7 text-adesa-300">{siteConfig.newsletter.description}</p>
+        </div>
+        <Link
+          href={siteConfig.newsletter.url}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex min-h-12 w-fit items-center justify-center gap-2 whitespace-nowrap rounded-full border border-white/18 px-6 text-sm font-semibold text-adesa-100 transition-[border-color,color,transform] duration-150 hover:border-gold-400 hover:text-gold-300 active:translate-y-px"
+        >
+          {buttonText}
+          <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+        </Link>
+      </div>
+    </section>
   );
 }

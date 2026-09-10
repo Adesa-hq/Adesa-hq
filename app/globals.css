@@ -1,69 +1,243 @@
 @import "tailwindcss";
 
-/* Design Tokens */
 @theme {
-  --font-sans: Inter, system-ui, sans-serif;
-  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-playfair), Georgia, serif;
 
-  --color-adesa-900: #0A0F1C;
-  --color-adesa-800: #141B2D;
-  --color-adesa-700: #1E2A45;
-  --color-adesa-600: #2D3A5C;
-  --color-adesa-500: #3D4E73;
-  --color-adesa-400: #5A6B8A;
-  --color-adesa-300: #8494B2;
-  --color-adesa-200: #B8C4D9;
-  --color-adesa-100: #E4E9F2;
-  --color-adesa-50: #F5F7FA;
+  --color-adesa-950: #050912;
+  --color-adesa-900: #0a1120;
+  --color-adesa-850: #0e1728;
+  --color-adesa-800: #142039;
+  --color-adesa-700: #22314f;
+  --color-adesa-600: #344768;
+  --color-adesa-500: #526788;
+  --color-adesa-400: #788aa8;
+  --color-adesa-300: #a7b3c9;
+  --color-adesa-200: #d0d7e5;
+  --color-adesa-100: #ebeff6;
+  --color-adesa-50: #f8fafc;
 
-  --color-gold-500: #B8860B;
-  --color-gold-400: #D4A017;
-  --color-gold-300: #E5B832;
+  --color-gold-600: #835b14;
+  --color-gold-500: #a87719;
+  --color-gold-400: #d7a638;
+  --color-gold-300: #edcb75;
+  --color-gold-200: #fae7af;
 
-  --color-neutral-950: #030712;
+  --color-neutral-950: #050912;
   --color-neutral-900: #111827;
-  --color-neutral-800: #1F2937;
+  --color-neutral-800: #1f2937;
   --color-neutral-700: #374151;
-  --color-neutral-600: #4B5563;
-  --color-neutral-500: #6B7280;
-  --color-neutral-400: #9CA3AF;
-  --color-neutral-300: #D1D5DB;
-  --color-neutral-200: #E5E7EB;
-  --color-neutral-100: #F3F4F6;
-  --color-neutral-50: #F9FAFB;
+  --color-neutral-600: #4b5563;
+  --color-neutral-500: #6b7280;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-300: #d1d5db;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-50: #f9fafb;
 }
 
-/* Base */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --layer-content: 1;
+  --layer-sticky: 20;
+  --layer-navigation: 40;
+  --layer-overlay: 60;
+  --layer-modal: 80;
+}
+
 html {
   scroll-behavior: smooth;
+  background: var(--color-adesa-950);
 }
 
 body {
+  min-width: 320px;
+  overflow-x: clip;
+  background: var(--color-adesa-950);
+  color: var(--color-adesa-100);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Selection */
-::selection {
-  background-color: var(--color-adesa-900);
-  color: #ffffff;
+body[data-menu-open="true"] {
+  overflow: hidden;
 }
 
-/* Scrollbar */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-serif);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold-300);
+  outline-offset: 4px;
+}
+
+::selection {
+  background: var(--color-gold-400);
+  color: var(--color-adesa-950);
+}
+
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-neutral-100);
+  background: var(--color-adesa-950);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-adesa-400);
   border-radius: 4px;
+  background: var(--color-adesa-700);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-adesa-600);
+.site-container {
+  width: min(100% - 2rem, 86rem);
+  margin-inline: auto;
+}
+
+.section-space {
+  padding-block: clamp(4.5rem, 8vw, 8rem);
+}
+
+.section-rule {
+  border-top: 1px solid rgb(255 255 255 / 0.09);
+}
+
+.adesa-grid-texture {
+  background-image:
+    linear-gradient(to right, rgb(232 237 245 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(232 237 245 / 0.045) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+.adesa-noise-texture {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.24'/%3E%3C/svg%3E");
+}
+
+.adesa-shell-surface {
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(10 17 32 / 0.94);
+  box-shadow: 0 16px 46px rgb(1 5 14 / 0.38);
+  backdrop-filter: blur(18px);
+}
+
+.adesa-card-luxury {
+  border: 1px solid rgb(255 255 255 / 0.09);
+  border-radius: 1rem;
+  background: var(--color-adesa-850);
+  box-shadow: 0 18px 50px rgb(1 5 14 / 0.28);
+  transition:
+    border-color 220ms ease,
+    transform 220ms var(--ease-out),
+    background-color 220ms ease;
+}
+
+.adesa-gold-gradient-text {
+  color: var(--color-gold-300);
+  -webkit-text-fill-color: currentColor;
+}
+
+.brand-loader-mark {
+  animation: brand-mark-settle 900ms var(--ease-out) both;
+}
+
+.brand-loader-line {
+  transform-origin: left;
+  animation: brand-line 900ms var(--ease-out) both;
+}
+
+.brand-loader-glow {
+  animation: brand-glow 1200ms var(--ease-in-out) both;
+}
+
+@keyframes brand-mark-settle {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes brand-line {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes brand-glow {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  45% {
+    opacity: 0.32;
+    transform: scale(1.04);
+  }
+}
+
+@media (min-width: 640px) {
+  .site-container {
+    width: min(100% - 3rem, 86rem);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .adesa-card-luxury:hover {
+    border-color: rgb(215 166 56 / 0.45);
+    background: var(--color-adesa-800);
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .adesa-shell-surface {
+    background: var(--color-adesa-900);
+    backdrop-filter: none;
+  }
 }

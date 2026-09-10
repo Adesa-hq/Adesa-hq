@@ -1,50 +1,40 @@
-"use client";
-import GridLine from "@/components/ui/gridLine";
-import { motion } from "framer-motion";
+import { MotionReveal } from "@/components/motion/motion-reveal";
+import { PageHero } from "@/components/ui/page-hero";
 
-export default function HeroSection() {
+const standards = [
+  ["Decision rights", "Clear ownership and escalation paths."],
+  ["Performance oversight", "Consistent reporting and review."],
+  ["Capital discipline", "Measured deployment and accountability."],
+];
+
+export default function GovernanceHeroSection() {
   return (
-    <section
-      className="relative min-h-screen flex items-center overflow-hidden bg-adesa-900 text-adesa-50"
-      aria-labelledby="hero-heading"
+    <PageHero
+      labelledBy="governance-hero-title"
+      backgroundImage="/legacy-in-motion-story.webp"
+      backgroundPosition="object-[22%_62%]"
+      imageClassName="opacity-40 grayscale-[0.25]"
+      treatment="right"
     >
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-225 h-225 bg-adesa-700 rounded-full blur-[180px] opacity-40" />
-        <div className="absolute -bottom-50 -right-50 w-150 h-150 bg-gold-500 rounded-full blur-[160px] opacity-10" />
+      <div className="grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:gap-20">
+        <MotionReveal direction="right">
+          <p className="mb-5 text-sm font-semibold text-gold-300">Governance</p>
+          <h1 id="governance-hero-title" className="max-w-[12ch] text-5xl font-medium leading-[1.02] tracking-[-0.045em] text-adesa-50 sm:text-6xl lg:text-7xl">
+            Standards that make growth more credible.
+          </h1>
+          <p className="mt-6 max-w-[54ch] text-base leading-7 text-adesa-200 sm:text-lg">
+            Governance is an operating advantage when it makes accountability, risk, and performance easier to understand.
+          </p>
+        </MotionReveal>
+        <div className="border-t border-white/12 lg:mt-8">
+          {standards.map(([title, description], index) => (
+            <MotionReveal key={title} className="border-b border-white/12 py-5" delay={index * 0.06}>
+              <h2 className="font-sans text-base font-semibold text-adesa-50">{title}</h2>
+              <p className="mt-1 text-sm leading-6 text-adesa-400">{description}</p>
+            </MotionReveal>
+          ))}
+        </div>
       </div>
-
-      <GridLine />
-      <div className="absolute inset-0 opacity-[0.03] bg-[url('/noise.png')]" />
-
-      <div className="relative z-10 mx-auto max-w-5xl px-6 lg:px-8 py-32 lg:py-40">
-        <header className="text-center lg:text-left">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
-          >
-            <p className="text-sm font-semibold tracking-widest uppercase text-gold-400 mb-6">
-              Governance
-            </p>
-
-            <h1
-              id="hero-heading"
-              className="font-serif text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight leading-[1.1]"
-            >
-              <span className="block">Institutional Standards</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-adesa-50 to-gold-400">
-                for Generational Success
-              </span>
-            </h1>
-
-            <p className="mt-8 text-xl text-adesa-200 leading-relaxed max-w-3xl mx-auto lg:mx-0">
-              Governance is not a constraint—it&apos;s our competitive
-              advantage. We operate with standards designed for institutional
-              longevity and stakeholder trust.
-            </p>
-          </motion.div>
-        </header>
-      </div>
-    </section>
+    </PageHero>
   );
 }

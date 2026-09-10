@@ -1,22 +1,23 @@
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, buildWebPageJsonLd } from "@/lib/seo";
 import HeroSection from "@/components/sections/legal/hero-section";
 import PrivacyContentSection from "@/components/sections/legal/privacy-content-section";
+import PageJsonLd from "@/components/seo/page-json-ld";
+import { SEO_PAGES } from "@/config/seo";
 
-export const metadata = constructMetadata({
-  title: "Privacy Policy",
-  description:
-    "ADESA HQ's privacy policy explains how we collect, use, disclose, and safeguard your information when you visit our website or engage with our services.",
-  path: "/privacy", // ensures canonical URL is correct
-  noIndex: false, // privacy pages usually should be indexed
+const pageSeo = SEO_PAGES["/privacy"];
+
+export const metadata = constructMetadata(pageSeo);
+
+const privacyJsonLd = buildWebPageJsonLd({
+  ...pageSeo,
+  name: pageSeo.schemaName,
+  type: pageSeo.schemaType,
 });
 
 export default function PrivacyPage() {
   return (
-    <main role="main">
-      <h1 className="sr-only">
-        ADESA HQ Privacy Policy - How we handle your data
-      </h1>
-
+    <main role="main" className="flex-1">
+      <PageJsonLd data={privacyJsonLd} />
       {/* Hero Section */}
       <HeroSection />
 

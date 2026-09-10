@@ -1,23 +1,23 @@
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, buildWebPageJsonLd } from "@/lib/seo";
 import TermsContentSection from "@/components/sections/legal/terms-content-section";
 import HeroSectionTerms from "@/components/sections/legal/hero-section-terms";
+import PageJsonLd from "@/components/seo/page-json-ld";
+import { SEO_PAGES } from "@/config/seo";
 
-export const metadata = constructMetadata({
-  title: "Terms of Service",
-  description:
-    "ADESA HQ's terms of service outline the agreement for using our website and services, including intellectual property rights, limitations, and governing law.",
-  path: "/terms-of-service", // ensures canonical URL is correct
-  noIndex: false, // allow indexing, change to true if you want it hidden
+const pageSeo = SEO_PAGES["/terms"];
+
+export const metadata = constructMetadata(pageSeo);
+
+const termsJsonLd = buildWebPageJsonLd({
+  ...pageSeo,
+  name: pageSeo.schemaName,
+  type: pageSeo.schemaType,
 });
 
 export default function TermsPage() {
   return (
-    <main role="main">
-      <h1 className="sr-only">
-        ADESA HQ Terms of Service - User agreement, intellectual property, and
-        legal guidelines
-      </h1>
-
+    <main role="main" className="flex-1">
+      <PageJsonLd data={termsJsonLd} />
       {/* Hero Section */}
       <HeroSectionTerms />
 

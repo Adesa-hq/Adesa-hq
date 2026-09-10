@@ -1,150 +1,93 @@
-"use client";
-
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { Button } from "../ui/button";
 import Image from "next/image";
-import Logo from "../ui/logo";
+import Link from "next/link";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { MotionReveal } from "@/components/motion/motion-reveal";
+import { siteConfig } from "@/config/site";
 
 export default function HeroSection() {
   return (
     <section
-      className="relative min-h-screen flex items-center overflow-hidden bg-[#0B0F19] text-white"
-      aria-label="Hero Section - ADESA HQ"
+      className="relative isolate flex min-h-[100dvh] items-center overflow-hidden bg-adesa-950 pb-14 pt-24 text-adesa-50 sm:pb-20"
+      aria-labelledby="home-hero-title"
     >
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[800px] h-[800px] bg-[#151E47] rounded-full blur-[160px] opacity-60" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[700px] h-[700px] bg-[#FFA205] rounded-full blur-[140px] opacity-20" />
-        <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#E4E9F2_1px,transparent_1px),linear-gradient(to_bottom,#E4E9F2_1px,transparent_1px)] bg-[size:80px_80px]" />
-        <div className="absolute inset-0 opacity-[0.04] bg-[url('/noise.png')]" />
+      <div className="absolute inset-0 -z-30" data-hero-background="true" aria-hidden="true">
+        <Image
+          src="/adesa-brochure-showcase.webp"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover object-[66%_68%] opacity-25 saturate-[0.72]"
+        />
       </div>
+      <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(2,8,20,0.98)_0%,rgba(2,8,20,0.86)_48%,rgba(2,8,20,0.56)_100%)]" aria-hidden="true" />
+      <div className="adesa-grid-texture absolute inset-0 -z-10 opacity-35" aria-hidden="true" />
+      <div
+        className="absolute inset-x-0 bottom-0 -z-10 h-2/5 bg-[linear-gradient(to_top,rgba(20,32,57,0.72),transparent)]"
+        aria-hidden="true"
+      />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8 py-32">
-        <div className="grid lg:grid-cols-2 gap-20 items-center">
-          {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+      <div className="site-container grid items-center gap-10 lg:grid-cols-[0.88fr_1.12fr] lg:gap-8">
+        <MotionReveal className="relative z-10 max-w-2xl">
+          <Link
+            href={siteConfig.award.url}
+            target="_blank"
+            rel="noreferrer"
+            className="mb-5 inline-flex max-w-full items-center gap-2 border-b border-gold-400/45 pb-2 text-xs font-semibold text-gold-300 transition-colors duration-200 hover:text-gold-200 sm:text-sm"
           >
-            <p className="text-xs tracking-[0.4em] uppercase text-white/50 mb-8">
-              Multi-Sector Holding Group • Africa
-            </p>
+            <span>{siteConfig.award.title}</span>
+            <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+          </Link>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-medium leading-[1.05]">
-              <span className="block">Building</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-white/40">
-                Sector-Defining
-              </span>
-              <span className="block">African Businesses</span>
-            </h1>
-
-            <p className="mt-10 text-lg text-white/70 max-w-xl leading-relaxed">
-              ADESA HQ is a builder–operator group focused on conceiving,
-              launching, governing, and scaling businesses designed for
-              generational impact.
-            </p>
-
-            <div className="mt-12 flex flex-col sm:flex-row gap-6">
-              <Button
-                href="/about"
-                size="lg"
-                className="bg-white text-black hover:bg-white/90 rounded-full px-8"
-                role="link"
-                aria-label="Discover Our Approach"
-              >
-                Discover Our Approach
-                <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-
-              <Button
-                href="/structure"
-                variant="outline"
-                size="lg"
-                className="border-white/30 text-white hover:bg-white/10 rounded-full px-8"
-                role="link"
-                aria-label="Group Structure"
-              >
-                Group Structure
-              </Button>
-            </div>
-          </motion.div>
-
-          {/* Right Flow / Tree */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotate: -6 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            transition={{ duration: 1.2 }}
-            className="relative flex items-center justify-center w-full"
+          <h1
+            id="home-hero-title"
+            className="max-w-[12ch] text-[clamp(2.55rem,6vw,5.9rem)] font-medium leading-[0.98] tracking-[-0.045em]"
           >
-            <div className="relative w-[90%] max-w-[420px] sm:w-[420px] aspect-square">
-              <div className="absolute inset-0 rounded-[30px] sm:rounded-[40px] bg-white/5 backdrop-blur-2xl border border-white/10 shadow-[0_0_120px_rgba(255,162,5,0.15)]" />
+            Building African businesses that outlast cycles.
+          </h1>
 
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
-                className="absolute inset-[-20px] sm:inset-[-30px] rounded-[50px] sm:rounded-[60px] border border-white/10"
-              />
+          <p className="mt-6 max-w-[54ch] text-base leading-7 text-adesa-200 sm:text-lg">
+            ADESA HQ builds, governs, and strengthens companies designed for lasting relevance across Africa.
+          </p>
 
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-                className="absolute inset-[-8px] sm:inset-[-12px] rounded-[40px] sm:rounded-[50px] border border-white/5"
-              />
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link
+              href="/about"
+              className="inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gold-400 px-6 text-sm font-semibold text-adesa-950 transition-[transform,background-color] duration-150 hover:bg-gold-300 active:translate-y-px"
+            >
+              Our approach
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <Link
+              href="/structure"
+              className="inline-flex min-h-12 items-center justify-center whitespace-nowrap rounded-full border border-white/20 px-6 text-sm font-semibold text-adesa-100 transition-[border-color,color,transform] duration-150 hover:border-gold-400 hover:text-gold-300 active:translate-y-px"
+            >
+              Group structure
+            </Link>
+          </div>
+        </MotionReveal>
 
-              <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 sm:px-8 text-center">
-                <div className="flex flex-col items-center">
-                  <Logo aria-label="Adesa HQ Logo" />
-                  <p className="text-sm sm:text-xl font-medium tracking-wide">
-                    Adesa HQ
-                  </p>
-                </div>
-
-                <div className="w-px h-8 sm:h-10 bg-white/20 my-2 sm:my-4" />
-
-                <div className="relative w-full flex justify-center mb-4 sm:mb-6">
-                  <div className="absolute top-1/2 w-[70%] h-px bg-white/20" />
-                </div>
-
-                <div className="flex justify-between w-full max-w-[240px] sm:max-w-[280px]">
-                  <div className="flex flex-col items-center">
-                    <div className="relative w-12 h-12 sm:w-16 sm:h-16 overflow-hidden rounded-2xl bg-white/10 flex items-center justify-center mb-2 sm:mb-3">
-                      <Image
-                        src="/logo/Adesa-energy-logo.jpg"
-                        alt="Adesa Energy Logo"
-                        width={40}
-                        height={40}
-                        loading="lazy"
-                        className="w-20 h-12 sm:w-16 sm:h-16 absolute"
-                      />
-                    </div>
-                    <p className="text-xs sm:text-sm text-white/60 font-medium text-center">
-                      Adesa Energy
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col items-center">
-                    <div className="relative w-12 h-12 sm:w-16 sm:h-16 overflow-hidden rounded-2xl bg-white/10 flex items-center justify-center mb-2 sm:mb-3">
-                      <Image
-                        src="/logo/Adesa-media-logo-white.png"
-                        alt="Adesa Media Logo"
-                        width={80}
-                        height={40}
-                        loading="lazy"
-                        className="w-12 h-8 sm:w-20 sm:h-10 absolute"
-                      />
-                    </div>
-                    <p className="text-xs sm:text-sm text-white/60 font-medium text-center">
-                      Adesa Media
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+        <MotionReveal
+          className="relative mx-auto w-full max-w-[760px] lg:translate-x-[5%]"
+          delay={0.08}
+        >
+          <div className="absolute inset-x-[12%] bottom-[4%] h-[22%] rounded-[50%] bg-gold-400/15 blur-3xl" aria-hidden="true" />
+          <picture className="relative block">
+            <source
+              type="image/avif"
+              srcSet="/legacy-in-motion-hero-960.avif 960w, /legacy-in-motion-hero-1600.avif 1600w"
+              sizes="(max-width: 1023px) 92vw, 56vw"
+            />
+            <Image
+              src="/legacy-in-motion-hero-1600.webp"
+              width={1600}
+              height={1337}
+              priority
+              sizes="(max-width: 1023px) 92vw, 56vw"
+              alt="ADESA HQ house architecture bringing Adesa Media, Energy, Solutions, and Distribution under one group"
+              className="relative h-auto w-full object-contain drop-shadow-[0_28px_42px_rgba(1,5,14,0.55)]"
+            />
+          </picture>
+        </MotionReveal>
       </div>
     </section>
   );

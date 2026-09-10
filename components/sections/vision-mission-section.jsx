@@ -1,98 +1,34 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { Section } from "../ui/section";
+import { Compass, Target } from "lucide-react";
+import { MotionReveal } from "@/components/motion/motion-reveal";
 
 export default function VisionMissionSection() {
   return (
-    <Section
-      className="relative overflow-hidden bg-[var(--color-adesa-900)] text-[var(--color-adesa-100)] border-t border-[var(--color-adesa-700)]"
-      aria-labelledby="vision-mission-heading"
-    >
-      <h1 id="vision-mission-heading" className="sr-only">
-        Our Vision and Mission
-      </h1>
-
-      {/* Decorative glow */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-40 -left-40 w-[500px] h-[500px] sm:w-[600px] sm:h-[600px] bg-[var(--color-adesa-700)] rounded-full blur-[140px] opacity-40" />
-        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] sm:w-[600px] sm:h-[600px] bg-[var(--color-gold-500)] rounded-full blur-[160px] opacity-10" />
-      </div>
-
-      {/* Grid texture */}
-      <div
-        className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#E4E9F2_1px,transparent_1px),linear-gradient(to_bottom,#E4E9F2_1px,transparent_1px)] bg-[size:80px_80px]"
-        aria-hidden="true"
-      />
-
-      <div className="relative z-10 grid gap-10 sm:gap-14 lg:grid-cols-2 lg:gap-20">
-        {/* Vision */}
-        <motion.article
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="relative p-6 sm:p-8 lg:p-10 rounded-2xl sm:rounded-[28px] bg-[var(--color-adesa-800)] border border-[var(--color-adesa-700)] backdrop-blur-xl"
-        >
-          <div
-            className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-[var(--color-gold-400)] to-transparent"
-            aria-hidden="true"
-          />
-
-          <p className="text-[10px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] uppercase text-[var(--color-neutral-400)] mb-4 sm:mb-6">
-            Our Vision
-          </p>
-
-          <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium tracking-tight leading-[1.15]">
-            <span className="block text-[var(--color-adesa-50)]">
-              To build Africa&apos;s most
-            </span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-gold-300)] to-[var(--color-gold-500)]">
-              disciplined holding structure
-            </span>
+    <section className="section-rule bg-adesa-900 text-adesa-100" aria-labelledby="vision-mission-title">
+      <div className="site-container section-space">
+        <MotionReveal>
+          <h2 id="vision-mission-title" className="max-w-[17ch] text-4xl font-medium leading-[1.06] tracking-[-0.04em] text-adesa-50 sm:text-5xl lg:text-6xl">
+            Companies should be built to withstand scrutiny.
           </h2>
+        </MotionReveal>
 
-          <p className="mt-6 sm:mt-8 text-sm sm:text-base lg:text-lg leading-relaxed text-[var(--color-adesa-300)]">
-            We envision a future where African enterprises are synonymous with
-            institutional excellence, where governance is a competitive
-            advantage, and where long-term value creation supersedes short-term
-            gains.
-          </p>
-        </motion.article>
+        <div className="mt-12 grid gap-10 md:grid-cols-2 md:gap-16 lg:mt-20">
+          <MotionReveal className="border-t border-white/12 pt-6" direction="right">
+            <Compass className="h-6 w-6 text-gold-400" strokeWidth={1.5} aria-hidden="true" />
+            <h3 className="mt-8 text-2xl font-medium text-adesa-50 sm:text-3xl">Our vision</h3>
+            <p className="mt-4 max-w-[46ch] text-base leading-7 text-adesa-300">
+              To develop a portfolio of trusted, well-governed operating companies with the discipline to create value over time.
+            </p>
+          </MotionReveal>
 
-        {/* Mission */}
-        <motion.article
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="relative p-6 sm:p-8 lg:p-10 rounded-2xl sm:rounded-[28px] bg-[var(--color-adesa-800)] border border-[var(--color-adesa-700)] backdrop-blur-xl"
-        >
-          <div
-            className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-[var(--color-gold-400)] to-transparent"
-            aria-hidden="true"
-          />
-
-          <p className="text-[10px] sm:text-xs tracking-[0.3em] sm:tracking-[0.4em] uppercase text-[var(--color-neutral-400)] mb-4 sm:mb-6">
-            Our Mission
-          </p>
-
-          <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium tracking-tight leading-[1.15]">
-            <span className="block text-[var(--color-adesa-50)]">
-              Conceive, launch, and scale
-            </span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--color-gold-300)] to-[var(--color-gold-500)]">
-              sector-defining businesses
-            </span>
-          </h2>
-
-          <p className="mt-6 sm:mt-8 text-sm sm:text-base lg:text-lg leading-relaxed text-[var(--color-adesa-300)]">
-            Through rigorous governance, strategic capital allocation, and
-            operational discipline, we build businesses that create lasting
-            value for stakeholders and communities across the continent.
-          </p>
-        </motion.article>
+          <MotionReveal className="border-t border-white/12 pt-6 md:mt-16" direction="left" delay={0.06}>
+            <Target className="h-6 w-6 text-gold-400" strokeWidth={1.5} aria-hidden="true" />
+            <h3 className="mt-8 text-2xl font-medium text-adesa-50 sm:text-3xl">Our mission</h3>
+            <p className="mt-4 max-w-[46ch] text-base leading-7 text-adesa-300">
+              Conceive, launch, and strengthen businesses through clear oversight, practical operating support, and patient decision-making.
+            </p>
+          </MotionReveal>
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }

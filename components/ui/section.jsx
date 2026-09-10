@@ -1,79 +1,41 @@
-"use client";
-
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function Section({ children, className, dark = false, id, title }) {
   return (
     <section
       id={id}
-      aria-labelledby={title ? `${id}-title` : undefined}
+      aria-labelledby={title && id ? `${id}-title` : undefined}
       className={cn(
-        "py-24 md:py-32",
-        dark ? "bg-adesa-900 text-white" : "bg-neutral-50 text-adesa-900",
+        "section-space",
+        dark ? "bg-adesa-900 text-adesa-100" : "bg-adesa-950 text-adesa-100",
         className,
       )}
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">{children}</div>
+      <div className="site-container">{children}</div>
     </section>
   );
 }
 
-export function SectionHeader({
-  eyebrow,
-  title,
-  description,
-  centered = false,
-  dark = false,
-  motionProps = {},
-  id,
-}) {
+export function SectionHeader({ eyebrow, title, description, centered = false, dark = false, id }) {
   const titleId = id ? `${id}-title` : undefined;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.6 }}
-      className={cn(
-        "max-w-3xl",
-        centered && "mx-auto text-center",
-        motionProps.className,
-      )}
-      {...motionProps}
-    >
+    <header className={cn("max-w-3xl", centered && "mx-auto text-center")}>
       {eyebrow && (
-        <p
-          className={cn(
-            "text-sm font-semibold tracking-widest uppercase mb-4",
-            dark ? "text-gold-400" : "text-adesa-600",
-          )}
-        >
+        <p className={cn("mb-4 text-sm font-semibold", dark ? "text-gold-300" : "text-adesa-300")}>
           {eyebrow}
         </p>
       )}
       {title && (
-        <h2
-          id={titleId}
-          className={cn(
-            "font-serif text-4xl lg:text-5xl font-medium tracking-tight",
-            dark ? "text-white" : "text-adesa-900",
-          )}
-        >
+        <h2 id={titleId} className={cn("text-3xl font-medium tracking-[-0.035em] sm:text-4xl lg:text-5xl", dark ? "text-white" : "text-adesa-50")}>
           {title}
         </h2>
       )}
       {description && (
-        <p
-          className={cn(
-            "mt-6 text-lg leading-relaxed",
-            dark ? "text-adesa-200" : "text-neutral-600",
-          )}
-        >
+        <p className={cn("mt-5 max-w-[62ch] text-base leading-7 sm:text-lg", dark ? "text-adesa-200" : "text-adesa-300")}>
           {description}
         </p>
       )}
-    </motion.div>
+    </header>
   );
 }

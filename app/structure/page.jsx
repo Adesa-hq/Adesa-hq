@@ -1,39 +1,27 @@
-import MasterBrandSection from "@/components/sections/structure/master-brand-section";
-import CorporateHierarchySection from "@/components/sections/structure/corporate-hierarchy-section";
-import OperatingModelSection from "@/components/sections/structure/operating-model-section";
-import CTASection from "@/components/sections/structure/cta-section";
+import StructureEditorialSections from "@/components/sections/structure/editorial-sections";
 import HeroSection from "@/components/sections/structure/hero-section";
-import { constructMetadata } from "@/lib/seo";
+import { constructMetadata, buildWebPageJsonLd } from "@/lib/seo";
+import PageJsonLd from "@/components/seo/page-json-ld";
+import { SEO_PAGES } from "@/config/seo";
 
-export const metadata = constructMetadata({
-  title: "Group Structure",
-  description:
-    "Explore ADESA HQ's master brand architecture, corporate hierarchy, and operating model designed for governance and growth across Africa.",
-  path: "/structure", // ensures canonical URL is correct
+const pageSeo = SEO_PAGES["/structure"];
+
+export const metadata = constructMetadata(pageSeo);
+
+const structureJsonLd = buildWebPageJsonLd({
+  ...pageSeo,
+  name: pageSeo.schemaName,
+  type: pageSeo.schemaType,
 });
 
 export default function GroupStructurePage() {
   return (
-    <main role="main">
-      <h1 className="sr-only">
-        ADESA HQ Group Structure - Master Brand, Corporate Hierarchy, and
-        Operating Model
-      </h1>
-
+    <main role="main" className="flex-1">
+      <PageJsonLd data={structureJsonLd} />
       {/* Hero - Server Component */}
       <HeroSection />
 
-      {/* Master Brand Explanation - Client Component */}
-      <MasterBrandSection />
-
-      {/* Corporate Hierarchy - Client Component */}
-      <CorporateHierarchySection />
-
-      {/* Operating Model - Client Component */}
-      <OperatingModelSection />
-
-      {/* CTA - Client Component */}
-      <CTASection />
+      <StructureEditorialSections />
     </main>
   );
 }

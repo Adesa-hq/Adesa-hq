@@ -1,80 +1,50 @@
-"use client";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { ACTIVE_SUBSIDIARIES } from "@/config/brand";
+import { MotionReveal } from "@/components/motion/motion-reveal";
 
-import { motion } from "framer-motion";
-import SubsidiaryCard from "./subsidiaries/subsidiary-card";
+const spans = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-5", "lg:col-span-7"];
 
 export default function SubsidiariesSection() {
   return (
-    <section
-      className="relative py-20 sm:py-24 lg:py-32 bg-[var(--color-adesa-900)] overflow-hidden"
-      aria-labelledby="subsidiaries-section-title"
-    >
-      {/* Atmosphere */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute -top-32 sm:-top-40 left-1/2 -translate-x-1/2 w-[600px] sm:w-[900px] h-[600px] sm:h-[900px] bg-adesa-700 rounded-full blur-[140px] sm:blur-[180px] opacity-40" />
-        <div className="absolute bottom-[-150px] sm:bottom-[-200px] right-[-150px] sm:right-[-200px] w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-gold-500 rounded-full blur-[120px] sm:blur-[160px] opacity-10" />
-      </div>
-
-      {/* Subtle grid */}
-      <div className="absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#E4E9F2_1px,transparent_1px),linear-gradient(to_bottom,#E4E9F2_1px,transparent_1px)] bg-[size:80px_80px]" />
-
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <header className="max-w-3xl">
-          <p className="text-[10px] sm:text-xs tracking-[0.35em] sm:tracking-[0.4em] uppercase text-[var(--color-adesa-300)] mb-4 sm:mb-6">
-            Group Companies
-          </p>
-
-          <h2
-            id="subsidiaries-section-title"
-            className="text-2xl sm:text-3xl lg:text-5xl font-medium text-[var(--color-adesa-50)] leading-tight"
-          >
-            Operating Subsidiaries
+    <section className="section-rule bg-adesa-900 text-adesa-100" aria-labelledby="subsidiaries-title">
+      <div className="site-container section-space">
+        <MotionReveal>
+          <h2 id="subsidiaries-title" className="max-w-[13ch] text-4xl font-medium leading-[1.05] tracking-[-0.04em] text-adesa-50 sm:text-5xl">
+            Distinct companies. Shared standards.
           </h2>
-
-          <p className="mt-4 sm:mt-6 text-sm sm:text-base lg:text-lg text-[var(--color-adesa-300)] leading-relaxed">
-            Each subsidiary operates with autonomy while adhering to group-level
-            governance standards and strategic alignment.
+          <p className="mt-5 max-w-[56ch] text-base leading-7 text-adesa-300">
+            Each company owns a clear operating mandate while benefiting from group-level governance, capability, and strategic direction.
           </p>
-        </header>
+        </MotionReveal>
 
-        {/* Grid */}
-        <div className="mt-12 sm:mt-16 lg:mt-20 grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
-          {/* Featured */}
-          <motion.article
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:col-span-2"
-          >
-            <SubsidiaryCard
-              name="Adesa Media"
-              description="A full-spectrum media and creative services company delivering strategic communications, brand development, and content production for leading organizations across Africa."
-              services={[
-                "Strategic Communications",
-                "Brand Development",
-                "Content Production",
-                "Digital Media",
-              ]}
-              href="/subsidiaries/media"
-              featured
-            />
-          </motion.article>
-
-          {/* Secondary */}
-          <motion.article
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-          >
-            <SubsidiaryCard
-              name="Portfolio Expansion"
-              description="Additional operating companies in development. Our expansion follows deliberate sector analysis and opportunity assessment."
-              href="/structure"
-            />
-          </motion.article>
+        <div className="mt-12 grid gap-4 lg:grid-cols-12">
+          {ACTIVE_SUBSIDIARIES.map((subsidiary, index) => (
+            <MotionReveal key={subsidiary.name} className={spans[index]} delay={index * 0.05}>
+              <article className="group flex h-full min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-adesa-850 p-6 sm:p-8">
+                <div className="flex items-start justify-between gap-6">
+                  <div className="relative h-16 w-20 overflow-hidden rounded-xl bg-black p-2">
+                    <Image src={subsidiary.image} alt={`${subsidiary.name} logo`} fill sizes="80px" className="object-contain p-2" />
+                  </div>
+                  <span className="font-sans text-sm text-adesa-400">{subsidiary.sector}</span>
+                </div>
+                <div className="mt-16">
+                  <h3 className="text-3xl font-medium text-adesa-50 sm:text-4xl">{subsidiary.name}</h3>
+                  <p className="mt-4 max-w-[55ch] text-sm leading-6 text-adesa-300 sm:text-base">{subsidiary.description}</p>
+                  <Link
+                    href={subsidiary.href}
+                    target={subsidiary.href.startsWith("http") ? "_blank" : undefined}
+                    rel={subsidiary.href.startsWith("http") ? "noreferrer" : undefined}
+                    className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-gold-300 transition-colors duration-200 hover:text-gold-200"
+                  >
+                    Visit {subsidiary.name}
+                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </div>
+              </article>
+            </MotionReveal>
+          ))}
         </div>
       </div>
     </section>

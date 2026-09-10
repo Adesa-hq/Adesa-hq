@@ -2,17 +2,16 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle2, Send, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import GridLine from "@/components/ui/gridLine";
 import { z } from "zod";
 
-// Schema for Zod client-side validation
 const contactSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
   email: z.string().email("Invalid email address"),
-  service: z.string().min(1, "Service is required"),
+  service: z.string().min(1, "Inquiry type is required"),
   message: z.string().min(1, "Message is required"),
 });
 
@@ -22,29 +21,33 @@ export default function ContactFormSection() {
     firstName: "",
     lastName: "",
     email: "",
+    organization: "",
     service: "",
     message: "",
   });
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+    if (error) setError(null);
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const parsed = contactSchema.safeParse(formData);
     if (!parsed.success) {
-      setError(parsed.error.format());
+      const firstIssue = parsed.error.issues[0];
+      const fieldLabel = firstIssue.path.length
+        ? firstIssue.path.join(" → ") + ": "
+        : "";
+      setError(fieldLabel + firstIssue.message);
       return;
     }
 
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/contact", {
@@ -57,211 +60,188 @@ export default function ContactFormSection() {
       if (result.success) {
         setSubmitted(true);
       } else {
-        setError("Failed to send message");
+        setError(result.message || "Failed to send message");
       }
-    } catch (error) {
-      setError("An error occurred, please try again.");
+    } catch (err) {
+      setError("An unexpected error occurred. Please try again.");
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
   if (submitted) {
     return (
       <motion.article
-        initial={{ opacity: 0, scale: 0.92 }}
+        initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
-        className="relative min-h-[500px] flex items-center justify-center overflow-hidden px-4 sm:px-8"
+        className="relative min-h-[480px] flex items-center justify-center p-6 sm:p-10"
       >
-        <motion.div
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="relative z-10 w-full max-w-lg"
-        >
-          <div className="absolute inset-0 bg-adesa-900" />
-          <div className="absolute -top-32 -right-32 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-gold-500/10 blur-[140px] rounded-full" />
-
-          <GridLine />
-
-          <div className="relative z-10 text-center px-6 sm:px-12 py-12 sm:py-16 bg-adesa-800/60 backdrop-blur-2xl border border-adesa-700 rounded-2xl shadow-[0_0_80px_rgba(184,134,11,0.15)]">
-            <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-gold-500/15 border border-gold-400/40 mb-6 sm:mb-8">
-              <CheckCircle className="w-6 h-6 sm:w-8 sm:h-8 text-gold-400" />
-            </div>
-
-            <h2 className="font-serif text-2xl sm:text-3xl text-adesa-100 mb-3 sm:mb-4">
-              Message Received
-            </h2>
-
-            <p className="text-adesa-300 text-sm sm:text-base max-w-sm sm:max-w-md mx-auto mb-6 sm:mb-10 leading-relaxed">
-              Thank you for reaching out. Our team will review your message and
-              respond within 2-3 business days.
-            </p>
-
-            <Button
-              onClick={() => setSubmitted(false)}
-              className="bg-gold-500 hover:bg-gold-400 text-adesa-900 rounded-full px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-lg"
-            >
-              Send Another Message
-            </Button>
+        <div className="relative z-10 w-full max-w-lg border-t border-gold-400/50 bg-adesa-950 p-8 text-center sm:p-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gold-400/15 border border-gold-400/40 mb-6">
+            <CheckCircle2 className="w-8 h-8 text-gold-400" />
           </div>
-        </motion.div>
+
+          <h2 className="font-serif text-2xl sm:text-3xl text-white mb-3">
+            Inquiry Transmitted
+          </h2>
+
+          <p className="text-adesa-200 text-sm leading-relaxed mb-8">
+            Thank you for reaching out to ADESA HQ. Our executive governance team will review your inquiry and connect with you within 2-3 business days.
+          </p>
+
+          <Button
+            onClick={() => setSubmitted(false)}
+            className="bg-gold-400 text-adesa-950 font-semibold rounded-full px-8 py-3 text-sm hover:bg-gold-300"
+          >
+            Submit Another Inquiry
+          </Button>
+        </div>
       </motion.article>
     );
   }
 
   return (
-    <section
-      className="relative overflow-hidden"
-      aria-labelledby="contact-form-heading"
-    >
-      <div className="absolute inset-0 bg-adesa-900" />
-      <div className="absolute -top-40 -left-40 w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-adesa-700/40 blur-[160px] rounded-full" />
-      <div className="absolute -bottom-40 -right-40 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-gold-500/10 blur-[140px] rounded-full" />
-
+    <div className="py-8 sm:p-8 lg:p-12">
       <motion.form
         id="contact-form"
         aria-describedby="contact-form-description"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         onSubmit={handleSubmit}
-        className="relative z-10 w-full max-w-full sm:max-w-3xl mx-auto px-4 sm:px-8 py-12 sm:py-16 bg-adesa-800/60 backdrop-blur-2xl border border-adesa-700 rounded-2xl shadow-[0_0_100px_rgba(0,0,0,0.4)]"
+        className="relative z-10 w-full p-0 sm:p-4"
       >
-        <h2
-          id="contact-form-heading"
-          className="font-serif text-2xl sm:text-3xl text-adesa-100 mb-3 sm:mb-4"
-        >
-          Send a Message
-        </h2>
+        <div className="mb-8">
+          <p className="text-[10px] uppercase tracking-[0.25em] text-gold-400 font-semibold mb-2">
+            Secure Channel
+          </p>
+          <h2 id="contact-form-heading" className="font-serif text-2xl sm:text-3xl font-medium text-white">
+            Initiate a Conversation
+          </h2>
+          <p id="contact-form-description" className="text-xs sm:text-sm text-adesa-300 mt-2">
+            Please fill out the details below. Required fields are marked with *
+          </p>
+        </div>
 
-        <p
-          id="contact-form-description"
-          className="text-adesa-300 text-sm sm:text-base mb-6 sm:mb-12"
-        >
-          Fill out the form below to reach our team. Required fields are marked
-          with *
-        </p>
-
-        <fieldset className="space-y-6 sm:space-y-8 border-0 p-0 m-0">
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-8">
-            <Field
-              label="First Name *"
-              id="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-            />
-            <Field
-              label="Last Name *"
-              id="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-            />
+        <fieldset className="space-y-5 border-0 p-0 m-0">
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+            <div>
+              <label htmlFor="firstName" className="block text-xs uppercase tracking-wider text-adesa-300 mb-2 font-medium">
+                First Name *
+              </label>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                required
+                value={formData.firstName}
+                onChange={handleChange}
+                placeholder="John"
+                className="w-full px-4 py-3.5 bg-adesa-950 border border-white/10 rounded-xl text-sm text-white placeholder:text-adesa-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-[border-color,box-shadow]"
+              />
+            </div>
+            <div>
+              <label htmlFor="lastName" className="block text-xs uppercase tracking-wider text-adesa-300 mb-2 font-medium">
+                Last Name *
+              </label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                required
+                value={formData.lastName}
+                onChange={handleChange}
+                placeholder="Doe"
+                className="w-full px-4 py-3.5 bg-adesa-950 border border-white/10 rounded-xl text-sm text-white placeholder:text-adesa-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-[border-color,box-shadow]"
+              />
+            </div>
           </div>
 
-          <Field
-            label="Email Address *"
-            id="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+            <div>
+              <label htmlFor="email" className="block text-xs uppercase tracking-wider text-adesa-300 mb-2 font-medium">
+                Email Address *
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="john@example.com"
+                className="w-full px-4 py-3.5 bg-adesa-950 border border-white/10 rounded-xl text-sm text-white placeholder:text-adesa-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-[border-color,box-shadow]"
+              />
+            </div>
+            <div>
+              <label htmlFor="organization" className="block text-xs uppercase tracking-wider text-adesa-300 mb-2 font-medium">
+                Organization / Fund
+              </label>
+              <input
+                id="organization"
+                name="organization"
+                type="text"
+                value={formData.organization}
+                onChange={handleChange}
+                placeholder="Enterprise Ltd."
+                className="w-full px-4 py-3.5 bg-adesa-950 border border-white/10 rounded-xl text-sm text-white placeholder:text-adesa-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-[border-color,box-shadow]"
+              />
+            </div>
+          </div>
 
-          <Field
-            label="Organization"
-            id="organization"
-            value={formData.organization}
-            onChange={handleChange}
-          />
+          <div>
+            <label htmlFor="service" className="block text-xs uppercase tracking-wider text-adesa-300 mb-2 font-medium">
+              Inquiry Focus *
+            </label>
+            <select
+              id="service"
+              name="service"
+              value={formData.service}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-3.5 bg-adesa-950 border border-white/10 rounded-xl text-sm text-white focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-[border-color,box-shadow]"
+            >
+              <option value="" className="bg-adesa-950">Select Inquiry Area</option>
+              <option value="partnership" className="bg-adesa-950">Strategic Partnership & Co-Investment</option>
+              <option value="subsidiary" className="bg-adesa-950">Subsidiary Operating Services</option>
+              <option value="governance" className="bg-adesa-950">Governance Advisory & Institutional Inquiry</option>
+              <option value="press" className="bg-adesa-950">Media & Corporate Communications</option>
+            </select>
+          </div>
 
-          <SelectField value={formData.service} onChange={handleChange} />
-
-          <TextareaField value={formData.message} onChange={handleChange} />
+          <div>
+            <label htmlFor="message" className="block text-xs uppercase tracking-wider text-adesa-300 mb-2 font-medium">
+              Executive Message *
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows={4}
+              required
+              value={formData.message}
+              onChange={handleChange}
+              placeholder="Outline the nature of your inquiry, organization context, and objectives..."
+              className="w-full px-4 py-3.5 bg-adesa-950 border border-white/10 rounded-xl text-sm text-white placeholder:text-adesa-500 focus:outline-none focus:border-gold-400 focus:ring-1 focus:ring-gold-400 transition-[border-color,box-shadow] resize-none"
+            />
+          </div>
         </fieldset>
+
+        {error && (
+          <div className="mt-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-300">
+            {error}
+          </div>
+        )}
 
         <Button
           type="submit"
           size="lg"
-          className="w-full bg-gold-500 hover:bg-gold-400 text-adesa-900 rounded-full py-4 sm:py-6 text-base sm:text-lg mt-6 sm:mt-8"
-          disabled={isLoading} // Disable the button when loading
+          className="w-full bg-gold-400 text-adesa-950 font-semibold rounded-full py-4 text-sm mt-6 hover:bg-gold-300 transition-colors"
+          disabled={isLoading}
         >
-          {isLoading ? "Sending..." : "Send Message"} {/* Show loading text */}
+          {isLoading ? "Submitting Inquiry..." : "Transmit Message"}
         </Button>
-        {error && <div className="text-red-500">{error}</div>}
       </motion.form>
-    </section>
-  );
-}
-
-function Field({ label, id, type = "text", value, onChange }) {
-  return (
-    <div className="relative">
-      <label
-        htmlFor={id}
-        className="block text-xs sm:text-sm tracking-wide text-adesa-300 mb-2 sm:mb-3"
-      >
-        {label}
-      </label>
-      <input
-        id={id}
-        name={id}
-        type={type}
-        required={label.includes("*")}
-        value={value}
-        onChange={onChange}
-        className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-adesa-900/60 border border-adesa-700 rounded-xl text-adesa-100 placeholder:text-adesa-500 focus:outline-none focus:border-gold-400 focus:ring-2 focus:ring-gold-500/30 transition-all"
-      />
-    </div>
-  );
-}
-
-function SelectField({ value, onChange }) {
-  return (
-    <div>
-      <label
-        htmlFor="inquiryType"
-        className="block text-xs sm:text-sm tracking-wide text-adesa-300 mb-2 sm:mb-3"
-      >
-        Inquiry Type *
-      </label>
-      <select
-        id="inquiryType"
-        name="service"
-        value={value}
-        onChange={onChange}
-        required
-        className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-adesa-900/60 border border-adesa-700 rounded-xl text-adesa-100 focus:outline-none focus:border-gold-400 focus:ring-2 focus:ring-gold-500/30 transition-all"
-      >
-        <option value="">Select an option</option>
-        <option value="partnership">Partnership & Investment</option>
-        <option value="media">Media & Press</option>
-        <option value="services">Subsidiary Services</option>
-        <option value="general">General Inquiry</option>
-      </select>
-    </div>
-  );
-}
-
-function TextareaField({ value, onChange }) {
-  return (
-    <div>
-      <label
-        htmlFor="message"
-        className="block text-xs sm:text-sm tracking-wide text-adesa-300 mb-2 sm:mb-3"
-      >
-        Message *
-      </label>
-      <textarea
-        id="message"
-        name="message"
-        rows={5}
-        required
-        value={value}
-        onChange={onChange}
-        className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-adesa-900/60 border border-adesa-700 rounded-xl text-adesa-100 focus:outline-none focus:border-gold-400 focus:ring-2 focus:ring-gold-500/30 transition-all resize-none text-sm sm:text-base"
-      />
     </div>
   );
 }

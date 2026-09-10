@@ -1,32 +1,25 @@
-import { constructMetadata } from "@/lib/seo";
+import { buildWebPageJsonLd, constructMetadata } from "@/lib/seo";
 import HeroSection from "@/components/sections/about/hero-section";
-import NarrativeSection from "@/components/sections/about/narrative-section";
-import ValuesSection from "@/components/sections/about/values-section";
-import TimelineSection from "@/components/sections/about/timeline-section";
-import CTASsection from "@/components/sections/about/cta-section";
-import PhilosophyPillarsSection from "@/components/sections/about/philosophy-pillars-section";
+import AboutEditorialSections from "@/components/sections/about/editorial-sections";
+import PageJsonLd from "@/components/seo/page-json-ld";
+import { SEO_PAGES } from "@/config/seo";
 
-export const metadata = constructMetadata({
-  title: "About ADESA HQ - Builder-Operator Philosophy",
-  description:
-    "Learn about ADESA HQ's builder-operator philosophy, governance framework, and commitment to long-term institutional value creation across Africa.",
-  path: "/about", // ensures canonical URL points to About page
+const pageSeo = SEO_PAGES["/about"];
+
+export const metadata = constructMetadata(pageSeo);
+
+const aboutJsonLd = buildWebPageJsonLd({
+  ...pageSeo,
+  name: pageSeo.schemaName,
+  type: pageSeo.schemaType,
 });
 
 export default function AboutPage() {
   return (
-    <main role="main">
-      <h1 className="sr-only">
-        About ADESA HQ - Builder-Operator Philosophy and Governance in Africa
-      </h1>
-
+    <main role="main" className="flex-1">
+      <PageJsonLd data={aboutJsonLd} />
       <HeroSection />
-      <NarrativeSection />
-      <PhilosophyPillarsSection />
-      <ValuesSection />
-      {/* <GovernanceFrameworkSection /> */}
-      <TimelineSection />
-      <CTASsection />
+      <AboutEditorialSections />
     </main>
   );
 }
