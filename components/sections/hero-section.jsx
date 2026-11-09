@@ -1,94 +1,120 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { MotionReveal } from "@/components/motion/motion-reveal";
-import { siteConfig } from "@/config/site";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { ADESA_SOLUTIONS, ADESA_DISTRIBUTION } from "@/config/brand";
+import styles from "./hero-carousel.module.css";
+
+const ASSETS = "/assets/adesa";
+const DURATION = 6800;
+const slides = [
+  { id: "hq", name: "ADESA HQ", title: "Building African businesses that outlast cycles.", description: "A group committed to building, governing, and strengthening businesses for lasting impact.", cta: "Explore Our Group", href: "/structure", accent: "#bd881e" },
+  { id: "media", name: "ADESA Media", title: "Ideas that connect. Stories that influence.", description: "From strategic communications and brand development to digital campaigns, content production, and public relations, we bring brands closer to their audiences.", cta: "Visit ADESA Media", href: "https://adesamedia.com/", accent: "#00d8e8" },
+  { id: "energy", name: "ADESA Energy", title: "Cleaner fuel. Lower cost. Greater impact.", description: "Driving sustainable mobility and energy solutions through Compressed Natural Gas (CNG) infrastructure, supply, and adoption for businesses and communities.", cta: "Visit ADESA Energy", href: "https://adesaenergy.com/", accent: "#ff8a1c" },
+  { id: "solutions", name: "ADESA Solutions", title: "Designing spaces. Building possibilities.", description: "Delivering architectural and built-environment solutions, from design and planning to project execution and delivery.", cta: "Visit ADESA Solutions", href: ADESA_SOLUTIONS.href, accent: "#27b7ff" },
+  { id: "distribution", name: "ADESA Distribution", title: "Connecting products, businesses and markets.", description: "A reliable distribution network that moves goods efficiently from suppliers to customers across key markets.", cta: "Visit ADESA Distribution", href: ADESA_DISTRIBUTION.href, accent: "#ffffff" },
+];
+
+// Each polygon masks the original full-resolution logo. No shapes or lettering are redrawn.
+const pieces = ["roofNavy", "roofGold", "bar", "cyan", "orange", "navy", "lettering"];
+function LogoAssembly({ active }) {
+  return (
+    <div className={`${styles.assembly} ${active ? styles.assembling : ""}`} role="img" aria-label="ADESA HQ multicolored house logo">
+      {pieces.map((piece, index) => (
+        <div key={piece} className={`${styles.piece} ${styles[piece]}`} style={{ "--delay": `${index * 0.38}s` }}>
+          <Image src={`${ASSETS}/logos/adesa_hq.png`} alt="" fill sizes="(max-width: 767px) 65vw, 42vw" priority />
+        </div>
+      ))}
+      <div className={styles.completed}><Image src={`${ASSETS}/logos/adesa_hq.png`} alt="" fill sizes="(max-width: 767px) 65vw, 42vw" priority /></div>
+    </div>
+  );
+}
 
 export default function HeroSection() {
+  const [current, setCurrent] = useState(0);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [reduced, setReduced] = useState(false);
+  const touch = useRef(null);
+  const stopped = hovered || focused || paused || hidden || reduced;
+  const navigate = (index) => setCurrent((index + slides.length) % slides.length);
+
+  useEffect(() => {
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const visibility = () => setHidden(document.hidden);
+    const preference = () => setReduced(motion.matches);
+    visibility();
+    preference();
+    document.addEventListener("visibilitychange", visibility);
+    motion.addEventListener("change", preference);
+    return () => {
+      document.removeEventListener("visibilitychange", visibility);
+      motion.removeEventListener("change", preference);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (stopped) return;
+    const timer = window.setTimeout(() => setCurrent((value) => (value + 1) % slides.length), DURATION);
+    return () => window.clearTimeout(timer);
+  }, [current, stopped]);
+
   return (
-    <section
-      className="relative isolate flex min-h-[100dvh] items-center overflow-hidden bg-adesa-950 pb-14 pt-24 text-adesa-50 sm:pb-20"
-      aria-labelledby="home-hero-title"
-    >
-      <div className="absolute inset-0 -z-30" data-hero-background="true" aria-hidden="true">
-        <Image
-          src="/adesa-brochure-showcase.webp"
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover object-[66%_68%] opacity-25 saturate-[0.72]"
-        />
+    <section className={styles.hero} aria-label="ADESA group companies" aria-roledescription="carousel"
+      onFocusCapture={() => setFocused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}
+      onKeyDown={(event) => {
+        if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); navigate(current + (event.key === "ArrowRight" ? 1 : -1)); }
+      }}
+      onTouchStart={(event) => { touch.current = { x: event.touches[0].clientX, y: event.touches[0].clientY }; }}
+      onTouchEnd={(event) => {
+        if (!touch.current) return;
+        const dx = event.changedTouches[0].clientX - touch.current.x;
+        const dy = event.changedTouches[0].clientY - touch.current.y;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) navigate(current + (dx < 0 ? 1 : -1));
+        touch.current = null;
+      }} onTouchCancel={() => { touch.current = null; }}>
+      {slides.map((slide, index) => {
+        const active = index === current;
+        return (
+          <article key={slide.id} id={`hero-slide-${index}`} className={`${styles.slide} ${active ? styles.active : ""} ${index === 0 ? styles.hq : ""}`} style={{ "--accent": slide.accent }}
+            role="group" aria-roledescription="slide" aria-label={`${index + 1} of 5: ${slide.name}`} aria-hidden={!active} inert={!active}>
+            {index !== 0 && <div className={styles.background} data-hero-background="true">
+              <picture>
+                <source type="image/webp" srcSet={`${ASSETS}/carousel/adesa_${slide.id}-960.webp 960w, ${ASSETS}/carousel/adesa_${slide.id}-1672.webp 1672w`} sizes="100vw" />
+                <Image src={`${ASSETS}/carousel/adesa_${slide.id}-1672.webp`} alt="" fill sizes="100vw" loading="lazy" className={styles.photograph} />
+              </picture>
+            </div>}
+            <div className={`site-container ${styles.layout}`}>
+              <div className={styles.copy}>
+                {index === 0 ? <p className={styles.eyebrow}>ADESA HQ / BUILT TO ENDURE</p> : <div className={styles.logoPlate} data-company={slide.id}>
+                  <Image src={`${ASSETS}/logos/adesa_${slide.id}.png`} alt={`${slide.name} official logo`} width={200} height={110} loading="lazy" className={styles.subsidiaryLogo} />
+                </div>}
+                <span className={styles.accent} aria-hidden="true" />
+                {index === 0 ? <h1 className={styles.title}>{slide.title}</h1> : <h2 className={styles.title}>{slide.title}</h2>}
+                <p className={styles.description}>{slide.description}</p>
+                <Link className={styles.cta} href={slide.href} target={index ? "_blank" : undefined} rel={index ? "noopener noreferrer" : undefined}>{slide.cta}<ArrowRight size={18} aria-hidden="true" /></Link>
+              </div>
+              {index === 0 && <LogoAssembly active={active} />}
+            </div>
+          </article>
+        );
+      })}
+      <div className={`site-container ${styles.controls}`} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+        <span className={styles.counter} aria-hidden="true">0{current + 1} <span>/ 05</span></span>
+        <div className={styles.indicators} aria-label="Choose a slide">
+          {slides.map((slide, index) => <button key={slide.id} className={styles.indicator} aria-label={`Show ${slide.name}`} aria-current={current === index ? "true" : undefined} aria-controls={`hero-slide-${index}`} onClick={() => navigate(index)}><span className={current === index ? styles.selected : ""} /></button>)}
+        </div>
+        <div className={styles.arrows}>
+          <button aria-label={paused ? "Start slideshow" : "Pause slideshow"} aria-pressed={paused} onClick={() => { if (paused) { setHovered(false); setFocused(false); } setPaused(!paused); }}>{paused ? <Play size={17} /> : <Pause size={17} />}</button>
+          <button aria-label="Previous slide" onClick={() => navigate(current - 1)}><ChevronLeft size={20} /></button>
+          <button aria-label="Next slide" onClick={() => navigate(current + 1)}><ChevronRight size={20} /></button>
+        </div>
       </div>
-      <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(2,8,20,0.98)_0%,rgba(2,8,20,0.86)_48%,rgba(2,8,20,0.56)_100%)]" aria-hidden="true" />
-      <div className="adesa-grid-texture absolute inset-0 -z-10 opacity-35" aria-hidden="true" />
-      <div
-        className="absolute inset-x-0 bottom-0 -z-10 h-2/5 bg-[linear-gradient(to_top,rgba(20,32,57,0.72),transparent)]"
-        aria-hidden="true"
-      />
-
-      <div className="site-container grid items-center gap-10 lg:grid-cols-[0.88fr_1.12fr] lg:gap-8">
-        <MotionReveal className="relative z-10 max-w-2xl">
-          <Link
-            href={siteConfig.award.url}
-            target="_blank"
-            rel="noreferrer"
-            className="mb-5 inline-flex max-w-full items-center gap-2 border-b border-gold-400/45 pb-2 text-xs font-semibold text-gold-300 transition-colors duration-200 hover:text-gold-200 sm:text-sm"
-          >
-            <span>{siteConfig.award.title}</span>
-            <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
-          </Link>
-
-          <h1
-            id="home-hero-title"
-            className="max-w-[12ch] text-[clamp(2.55rem,6vw,5.9rem)] font-medium leading-[0.98] tracking-[-0.045em]"
-          >
-            Building African businesses that outlast cycles.
-          </h1>
-
-          <p className="mt-6 max-w-[54ch] text-base leading-7 text-adesa-200 sm:text-lg">
-            ADESA HQ builds, governs, and strengthens companies designed for lasting relevance across Africa.
-          </p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <Link
-              href="/about"
-              className="inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-gold-400 px-6 text-sm font-semibold text-adesa-950 transition-[transform,background-color] duration-150 hover:bg-gold-300 active:translate-y-px"
-            >
-              Our approach
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-            <Link
-              href="/structure"
-              className="inline-flex min-h-12 items-center justify-center whitespace-nowrap rounded-full border border-white/20 px-6 text-sm font-semibold text-adesa-100 transition-[border-color,color,transform] duration-150 hover:border-gold-400 hover:text-gold-300 active:translate-y-px"
-            >
-              Group structure
-            </Link>
-          </div>
-        </MotionReveal>
-
-        <MotionReveal
-          className="relative mx-auto w-full max-w-[760px] lg:translate-x-[5%]"
-          delay={0.08}
-        >
-          <div className="absolute inset-x-[12%] bottom-[4%] h-[22%] rounded-[50%] bg-gold-400/15 blur-3xl" aria-hidden="true" />
-          <picture className="relative block">
-            <source
-              type="image/avif"
-              srcSet="/legacy-in-motion-hero-960.avif 960w, /legacy-in-motion-hero-1600.avif 1600w"
-              sizes="(max-width: 1023px) 92vw, 56vw"
-            />
-            <Image
-              src="/legacy-in-motion-hero-1600.webp"
-              width={1600}
-              height={1337}
-              priority
-              sizes="(max-width: 1023px) 92vw, 56vw"
-              alt="ADESA HQ house architecture bringing Adesa Media, Energy, Solutions, and Distribution under one group"
-              className="relative h-auto w-full object-contain drop-shadow-[0_28px_42px_rgba(1,5,14,0.55)]"
-            />
-          </picture>
-        </MotionReveal>
-      </div>
+      <p className="sr-only" aria-live={stopped ? "polite" : "off"} aria-atomic="true">{slides[current].name}: {slides[current].title}</p>
     </section>
   );
 }

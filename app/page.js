@@ -6,6 +6,7 @@ import StatsSection from "@/components/sections/stats-section";
 import PhilosophySection from "@/components/sections/philosophy-section";
 import BrochureShowcaseSection from "@/components/sections/brochure-showcase-section";
 import SubsidiariesSection from "@/components/sections/subsidiaries-section";
+import TeamSection from "@/components/sections/team-section";
 import FinalCTASection from "@/components/sections/final-cta-section";
 import { buildWebPageJsonLd, constructMetadata } from "@/lib/seo";
 import SubscribeCard from "@/components/sections/SubscribeCard";
@@ -34,6 +35,7 @@ export default function Home() {
       <StatsSection />
       <PhilosophySection />
       <SubsidiariesSection />
+      <TeamSection />
       <SubscribeCard
         buttonText="Subscribe on LinkedIn"
         className="w-full"

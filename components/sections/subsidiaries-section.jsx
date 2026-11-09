@@ -24,8 +24,8 @@ export default function SubsidiariesSection() {
             <MotionReveal key={subsidiary.name} className={spans[index]} delay={index * 0.05}>
               <article className="group flex h-full min-h-[22rem] flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-adesa-850 p-6 sm:p-8">
                 <div className="flex items-start justify-between gap-6">
-                  <div className="relative h-16 w-20 overflow-hidden rounded-xl bg-black p-2">
-                    <Image src={subsidiary.image} alt={`${subsidiary.name} logo`} fill sizes="80px" className="object-contain p-2" />
+                  <div className="subsidiary-logo-frame relative h-16 w-20 overflow-hidden" data-company={subsidiary.name}>
+                    <Image src={subsidiary.image} alt={`${subsidiary.name} logo`} fill sizes="80px" className="object-contain" />
                   </div>
                   <span className="font-sans text-sm text-adesa-400">{subsidiary.sector}</span>
                 </div>

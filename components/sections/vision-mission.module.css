@@ -1,0 +1,55 @@
+.cards {
+  display: grid;
+  align-items: end;
+  gap: 1.5rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 2.5rem;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px solid rgb(255 255 255 / .12);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgb(255 255 255 / .025), transparent 70%);
+  transition: height 750ms cubic-bezier(.22, 1, .36, 1), border-color 400ms ease, background-color 400ms ease;
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-gold-400);
+  outline-offset: 5px;
+}
+
+@media (min-width: 768px) {
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    /* One tall card always reserves the row, so surrounding sections stay still. */
+    min-height: 26rem;
+    gap: clamp(1.5rem, 3vw, 3rem);
+  }
+
+  .vision { height: 26rem; }
+  .mission { height: 20rem; }
+  .card { min-height: min-content; }
+
+  .cards:has(.mission:focus-visible) .vision { height: 20rem; }
+  .cards:has(.mission:focus-visible) .mission { height: 26rem; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .cards:has(.mission:hover) .vision { height: 20rem; }
+    .cards:has(.mission:hover) .mission { height: 26rem; }
+    .cards:has(.vision:hover) .vision { height: 26rem; }
+    .cards:has(.vision:hover) .mission { height: 20rem; }
+  }
+}
+
+.card:hover,
+.card:focus-visible {
+  border-color: rgb(215 166 56 / .55);
+  background-color: rgb(215 166 56 / .035);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+}

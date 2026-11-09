@@ -1,0 +1,32 @@
+.control {
+  position: fixed;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: var(--layer-sticky);
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 1px solid rgb(62 167 240 / .25);
+  border-radius: 50%;
+  background: var(--color-adesa-950);
+  box-shadow: 0 8px 28px rgb(0 0 0 / .35);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(.92);
+  pointer-events: none;
+  cursor: pointer;
+  transition: opacity 220ms ease, transform 300ms cubic-bezier(.22, 1, .36, 1), visibility 220ms;
+}
+.control[data-visible="true"] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+}
+.control:hover { transform: translateY(-3px); }
+.control:focus-visible { outline: 2px solid #3ea7f0; outline-offset: 5px; }
+.icon { display: block; width: 100%; height: 100%; object-fit: contain; }
+@media (min-width: 640px) { .control { right: max(2rem, env(safe-area-inset-right)); bottom: max(2rem, env(safe-area-inset-bottom)); } }
+@media (prefers-reduced-motion: reduce) { .control { transition: none; transform: none; } }

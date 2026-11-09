@@ -8,7 +8,7 @@ export const ADESA_MEDIA = {
     "A full-spectrum media and creative services company delivering strategic communications, brand development, and content production for leading organizations across Africa.",
   href: "https://www.adesamedia.com/",
   careerHref: "https://www.adesamedia.com/careers",
-  image: "/logo/Adesa-media-logo-white.png",
+  image: "/assets/adesa/logos/adesa_media.png",
   badge: "AM",
   services: [
     "Strategic Communications",
@@ -31,7 +31,7 @@ export const ADESA_ENERGY = {
     "Focused on renewable power solutions and critical infrastructure development to support sustainable growth across African markets.",
   href: "https://www.adesaenergy.com/",
   careerHref: "https://www.adesaenergy.com/careers",
-  image: "/logo/Adesa-energy-logo.jpg",
+  image: "/assets/adesa/logos/adesa_energy.png",
   badge: "AE",
   services: [
     "Solar Infrastructure",
@@ -53,7 +53,7 @@ export const ADESA_SOLUTIONS = {
   description:
     "A solutions-led arm focused on practical systems, execution support, and operational problem solving across the ADESA group.",
   href: ADESA_INSTAGRAM_URL,
-  image: "/logo/Adesa-solution.jpg",
+  image: "/assets/adesa/logos/adesa_solutions.png",
   badge: "AS",
   services: [
     "Process Design",
@@ -75,7 +75,7 @@ export const ADESA_DISTRIBUTION = {
   description:
     "A market access, distribution, and supply chain company connecting manufacturers and suppliers with retailers, institutions, and consumers across Africa.",
   href: "https://www.instagram.com/adesadistribution?igsh=MTM0c3BvajlxaW80bg%3D%3D&utm_source=qr",
-  image: "/logo/Adesa-distribution-logo.jpg",
+  image: "/assets/adesa/logos/adesa_distribution.png",
   badge: "AD",
   services: [
     "Market Access",

@@ -18,7 +18,7 @@ export function PageHero({
   treatment = "left",
 }) {
   return (
-    <section className={cn("relative isolate overflow-hidden bg-adesa-950 pb-16 pt-28 text-adesa-100 sm:pb-20 sm:pt-32 lg:pb-24", className)} aria-labelledby={labelledBy}>
+    <section className={cn("relative isolate overflow-hidden bg-adesa-950 pb-16 pt-16 text-adesa-100 sm:pb-20 sm:pt-20 lg:pb-24", className)} aria-labelledby={labelledBy}>
       {backgroundImage ? (
         <div className="absolute inset-0 -z-30" data-hero-background="true" aria-hidden="true">
           <Image

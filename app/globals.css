@@ -112,7 +112,7 @@ textarea {
 }
 
 .site-container {
-  width: min(100% - 2rem, 86rem);
+  width: min(100% - 2.5rem, 82rem);
   margin-inline: auto;
 }
 
@@ -208,7 +208,7 @@ textarea {
 
 @media (min-width: 640px) {
   .site-container {
-    width: min(100% - 3rem, 86rem);
+    width: min(100% - 4rem, 82rem);
   }
 }
 
@@ -240,4 +240,15 @@ textarea {
     background: var(--color-adesa-900);
     backdrop-filter: none;
   }
+}
+
+/* Transparent logo treatments preserve the supplied source assets and brand colors. */
+.brand-mark { filter: drop-shadow(0 0 1px rgb(208 215 229 / .55)); }
+.subsidiary-logo-frame { background: transparent; }
+.subsidiary-logo-frame[data-company="Adesa Solutions"] img {
+  filter: drop-shadow(0 0 .7px rgb(235 239 246 / .9));
+}
+.subsidiary-logo-frame[data-company="Adesa Distribution"] img {
+  mask-image: radial-gradient(circle closest-side, #000 96%, transparent 98%);
+  mix-blend-mode: screen;
 }

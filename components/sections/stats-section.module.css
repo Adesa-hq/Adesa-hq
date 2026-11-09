@@ -1,0 +1,49 @@
+.stat {
+  position: relative;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 450ms ease, transform 650ms cubic-bezier(.22, 1, .36, 1);
+}
+
+/* Values and labels reserve their finished layout throughout the sequence. */
+.section[data-sequence] .stat[data-state="pending"] {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+.section[data-sequence] .stat::before {
+  content: "";
+  position: absolute;
+  inset: -1px 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-gold-500), var(--color-gold-200));
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+}
+
+.value {
+  min-height: 1.15em;
+  font-variant-numeric: tabular-nums lining-nums;
+  transition: text-shadow 450ms ease;
+}
+
+.stat[data-state="active"] .value {
+  text-shadow: 0 0 32px rgb(215 166 56 / .2);
+}
+
+.word { display: inline-flex; }
+.word > span { display: inline-block; }
+.stat[data-state="active"] .word > span {
+  animation: letter-arrival 450ms cubic-bezier(.22, 1, .36, 1) var(--letter-delay) both;
+}
+
+@keyframes letter-arrival {
+  from { opacity: 0; transform: translateY(12px) rotate(3deg); }
+  to { opacity: 1; transform: translateY(0) rotate(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat, .value { transition: none; }
+  .section[data-sequence] .stat[data-state="pending"] { opacity: 1; transform: none; }
+  .stat[data-state="active"] .word > span { animation: none; }
+}

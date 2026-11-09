@@ -10,6 +10,7 @@ import Logo from "../ui/logo";
 import { ACTIVE_SUBSIDIARIES } from "@/config/brand";
 
 const navigation = [
+  { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Group Structure", href: "/structure" },
   {
@@ -41,10 +42,10 @@ export function Header() {
 
   return (
     <header
-      className="fixed inset-x-0 top-0 px-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6"
+      className="sticky top-0 shrink-0 bg-adesa-950/95 px-5 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-xl sm:px-8"
       style={{ zIndex: "var(--layer-navigation)" }}
     >
-      <div className="adesa-shell-surface mx-auto max-w-[86rem] rounded-2xl">
+      <div className="adesa-shell-surface mx-auto max-w-[82rem] rounded-2xl">
         <nav className="flex h-16 items-center justify-between gap-4 px-3 sm:px-5" aria-label="Main navigation">
           <Link href="/" className="group flex min-w-0 items-center gap-3" aria-label="ADESA HQ home">
             <Logo variant="secondary" width={42} height={42} priority />
@@ -58,6 +59,7 @@ export function Header() {
               <li key={item.name} className="group relative">
                 <Link
                   href={item.href}
+                  aria-current={pathname === item.href ? "page" : undefined}
                   className={cn(
                     "flex h-11 items-center gap-1 whitespace-nowrap text-xs font-semibold text-adesa-200 transition-colors duration-200 hover:text-adesa-50",
                     (pathname === item.href || pathname.startsWith(`${item.href}/`)) && "text-gold-300",
@@ -116,7 +118,7 @@ export function Header() {
             animate={{ opacity: 1, transform: "translateY(0)" }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, transform: "translateY(-10px)" }}
             transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-            className="adesa-shell-surface mx-auto mt-2 max-h-[calc(100dvh-6rem-env(safe-area-inset-bottom))] max-w-[86rem] overflow-y-auto overscroll-contain rounded-2xl px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 lg:hidden"
+            className="adesa-shell-surface mx-auto mt-2 max-h-[calc(100dvh-6rem-env(safe-area-inset-bottom))] max-w-[82rem] overflow-y-auto overscroll-contain rounded-2xl px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 lg:hidden"
             aria-label="Mobile navigation"
           >
             <ul>
@@ -125,6 +127,7 @@ export function Header() {
                   <div className="flex items-center">
                     <Link
                       href={item.href}
+                      aria-current={pathname === item.href ? "page" : undefined}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
                         "flex min-h-14 flex-1 items-center text-base font-medium text-adesa-100",

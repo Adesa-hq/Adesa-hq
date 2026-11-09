@@ -41,11 +41,11 @@ for (const route of routes) {
   });
 }
 
-test("homepage proof, artwork, and media caption remain visible", async ({ page }) => {
+test("homepage proof, official logo, and media caption remain visible", async ({ page }) => {
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { name: /Building African businesses/i })).toBeVisible();
   await expect(page.getByRole("link", { name: /Best Multi-Sector Business Group 2026/i }).first()).toBeVisible();
-  await expect(page.getByAltText(/ADESA HQ house architecture/i)).toBeVisible();
+  await expect(page.getByRole("img", { name: "ADESA HQ multicolored house logo" })).toBeVisible();
 
   const media = page.getByTestId("brochure-media");
   const caption = page.getByTestId("brochure-caption");
@@ -58,7 +58,7 @@ test("homepage proof, artwork, and media caption remain visible", async ({ page 
 test("every public page hero loads a responsive background image", async ({ page }) => {
   test.skip(page.viewportSize().width !== 390, "Representative image loading check");
 
-  for (const route of routes) {
+  for (const route of routes.filter((route) => route !== "/")) {
     await page.goto(route, { waitUntil: "domcontentloaded" });
     const background = page.locator("[data-hero-background]").first();
     await expect(background).toBeVisible();
@@ -82,7 +82,7 @@ test("reduced motion keeps the homepage usable", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.getByRole("heading", { name: /Building African businesses/i })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Our approach" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Explore Our Group" })).toBeVisible();
 });
 
 test("inner routes expose distinct editorial landmarks", async ({ page }) => {

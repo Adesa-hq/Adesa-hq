@@ -10,7 +10,7 @@ export function BrandLoader({ className, label = "Loading ADESA HQ" }) {
     >
       <div className="brand-loader-glow absolute h-28 w-28 rounded-full bg-gold-400/20 blur-3xl" />
       <Image
-        src="/Adesa HQ new look secondary.png"
+        src="/assets/adesa/logos/adesa_hq_emblem.webp"
         width={88}
         height={88}
         alt=""

@@ -9,6 +9,7 @@ import { StructuredData } from "@/components/seo/structured-data";
 import { siteConfig } from "@/config/site";
 import { Analytics } from "@vercel/analytics/next";
 import { FirstVisitIntro } from "@/components/brand/first-visit-intro";
+import { BackToTop } from "@/components/ui/back-to-top";
 
 const inter = localFont({
   src: [
@@ -109,6 +110,7 @@ export default function RootLayout({ children }) {
             <Footer />
           </div>
         </AppShell>
+        <BackToTop />
         {process.env.VERCEL ? <Analytics /> : null}
       </body>
     </html>

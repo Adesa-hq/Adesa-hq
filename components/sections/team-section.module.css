@@ -1,0 +1,27 @@
+.member {
+  min-width: 0;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 650ms ease, transform 700ms cubic-bezier(.22, 1, .36, 1);
+}
+.section[data-sequence] .member[data-state="pending"] { opacity: 0; transform: translateY(22px); }
+.card { height: 100%; overflow: hidden; border: 1px solid rgb(255 255 255 / .1); border-radius: 1rem; background: var(--color-adesa-900); transition: border-color 350ms ease, box-shadow 350ms ease; }
+.portrait { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: #f1f2f3; }
+.image { object-fit: cover; transition: transform 700ms cubic-bezier(.22, 1, .36, 1); }
+.caption { min-height: 8.5rem; padding: 1.5rem 1.25rem; border-top: 2px solid rgb(215 166 56 / .4); }
+.member[data-state="active"] .card { border-color: rgb(215 166 56 / .45); box-shadow: 0 16px 40px rgb(0 0 0 / .18); }
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { border-color: rgb(215 166 56 / .45); }
+  .card:hover .image { transform: scale(1.025); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .member, .card, .image { transition: none; }
+  .section[data-sequence] .member[data-state="pending"] { opacity: 1; transform: none; }
+  .card:hover .image { transform: none; }
+}
+
+@media (min-width: 1024px) {
+  /* Keep the final two cards the same size, centered under the first four. */
+  .member:nth-child(5) { grid-column-start: 2; }
+  .member:nth-child(6) { grid-column-start: 3; }
+}

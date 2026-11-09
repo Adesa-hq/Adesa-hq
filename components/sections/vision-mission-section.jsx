@@ -1,5 +1,6 @@
 import { Compass, Target } from "lucide-react";
 import { MotionReveal } from "@/components/motion/motion-reveal";
+import styles from "./vision-mission.module.css";
 
 export default function VisionMissionSection() {
   return (
@@ -11,21 +12,29 @@ export default function VisionMissionSection() {
           </h2>
         </MotionReveal>
 
-        <div className="mt-12 grid gap-10 md:grid-cols-2 md:gap-16 lg:mt-20">
-          <MotionReveal className="border-t border-white/12 pt-6" direction="right">
-            <Compass className="h-6 w-6 text-gold-400" strokeWidth={1.5} aria-hidden="true" />
-            <h3 className="mt-8 text-2xl font-medium text-adesa-50 sm:text-3xl">Our vision</h3>
-            <p className="mt-4 max-w-[46ch] text-base leading-7 text-adesa-300">
-              To develop a portfolio of trusted, well-governed operating companies with the discipline to create value over time.
-            </p>
+        <div className={`mt-12 lg:mt-20 ${styles.cards}`}>
+          <MotionReveal direction="right">
+            <article className={`${styles.card} ${styles.vision}`} tabIndex={0} aria-labelledby="our-vision-title">
+              <Compass className="h-6 w-6 text-gold-400" strokeWidth={1.5} aria-hidden="true" />
+              <div>
+                <h3 id="our-vision-title" className="text-2xl font-medium text-adesa-50 sm:text-3xl">Our vision</h3>
+                <p className="mt-4 max-w-[46ch] text-base leading-7 text-adesa-300">
+                  To develop a portfolio of trusted, well-governed operating companies with the discipline to create value over time.
+                </p>
+              </div>
+            </article>
           </MotionReveal>
 
-          <MotionReveal className="border-t border-white/12 pt-6 md:mt-16" direction="left" delay={0.06}>
-            <Target className="h-6 w-6 text-gold-400" strokeWidth={1.5} aria-hidden="true" />
-            <h3 className="mt-8 text-2xl font-medium text-adesa-50 sm:text-3xl">Our mission</h3>
-            <p className="mt-4 max-w-[46ch] text-base leading-7 text-adesa-300">
-              Conceive, launch, and strengthen businesses through clear oversight, practical operating support, and patient decision-making.
-            </p>
+          <MotionReveal direction="left" delay={0.06}>
+            <article className={`${styles.card} ${styles.mission}`} tabIndex={0} aria-labelledby="our-mission-title">
+              <Target className="h-6 w-6 text-gold-400" strokeWidth={1.5} aria-hidden="true" />
+              <div>
+                <h3 id="our-mission-title" className="text-2xl font-medium text-adesa-50 sm:text-3xl">Our mission</h3>
+                <p className="mt-4 max-w-[46ch] text-base leading-7 text-adesa-300">
+                  Conceive, launch, and strengthen businesses through clear oversight, practical operating support, and patient decision-making.
+                </p>
+              </div>
+            </article>
           </MotionReveal>
         </div>
       </div>

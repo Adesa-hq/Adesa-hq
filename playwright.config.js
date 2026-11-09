@@ -18,7 +18,7 @@ export default defineConfig({
     baseURL: "http://127.0.0.1:3000",
     trace: "retain-on-failure",
     launchOptions: {
-      executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
     },
   },
   projects: viewports.map(([name, viewport]) => ({ name, use: { viewport } })),
