@@ -12,8 +12,8 @@ const team = [
   { id: "blessing-gbadeyan", name: "Blessing Gbadeyan", title: "Group Chief Operating Officer", image: "/assets/team/blessing-gbadeyan.png", position: "50% 25%" },
   { id: "osasenaga-aigiomwan", name: "Osasenaga Aigiomwan", title: "Group Human Resources Manager", image: "/assets/team/osasenaga-aigiomwan.jpg", position: "50% 20%" },
   { id: "anthonia-dike", name: "Anthonia Dike", title: "Group Brand Manager", image: "/assets/team/anthonia-dike.jpg", position: "50% 20%" },
-  { id: "joyce-osemudiamen", name: "Joyce Osemudiamen", title: "Legal and Compliance Executive", image: "/assets/team/joyce-osemudiamen.jpg", position: "50% 25%" },
   { id: "christian-samuel", name: "Christian Samuel", title: "IT Support Executive", image: "/assets/team/christian-samuel.png", position: "50% 22%" },
+  { id: "joyce-osemudiamen", name: "Joyce Osemudiamen", title: "Company Secretary", image: "/assets/team/joyce-osemudiamen.jpg", position: "50% 25%" },
 ];
 
 export default function TeamSection() {

@@ -65,3 +65,8 @@
 .assembling .completed { animation: complete 300ms ease 3.5s both; }
 @keyframes complete { to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .assembling .completed { animation: none; opacity: 1; } }
+
+/* The supplied portrait-format campaign photo retains more context on the right. */
+.mediaBackground { left: 40%; }
+.mediaBackground .photograph { object-position: 50% 25%; }
+@media (max-width: 767px) { .mediaBackground { left: 0; } }

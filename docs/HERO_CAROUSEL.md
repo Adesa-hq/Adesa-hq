@@ -2,10 +2,16 @@
 
 Implemented locally only. No deployment performed.
 
+## Latest Media photograph and team title update
+
+- Media now uses the supplied inDrive photograph, with its original JPG retained unchanged and responsive WebP variants generated at 960px/1080px. The portrait photograph occupies the right side on desktop with a soft gradient, and fills the slide on mobile. Existing Media copy, official logo, destination and carousel interactions are retained.
+- Joyce Osemudiamen is now Company Secretary and appears last. Current team sequence: Oluwafemi Adeleye, Blessing Gbadeyan, Osasenaga Aigiomwan, Anthonia Dike, Christian Samuel, Joyce Osemudiamen. The centered second row is IT followed by Company Secretary; reveals follow that reading order.
+- Historical Leadway/concept provenance below refers to the previous background; the active Media slide uses the newly supplied photo.
+
 ## Meet The Team
 
 - New `components/sections/team-section.jsx` and `team-section.module.css`, mounted on the homepage after Operating Companies and before the LinkedIn subscription section.
-- Exact heading: “Meet The Team”. Portrait/name/role order: Oluwafemi Adeleye — MD; Blessing Gbadeyan — Group Chief Operating Officer; Osasenaga Aigiomwan — Group Human Resources Manager; Anthonia Dike — Group Brand Manager; Joyce Osemudiamen — Legal and Compliance Executive; Christian Samuel — IT Support Executive. Each title appears beneath its name. Role spelling/capitalization has been normalized.
+- Exact heading: “Meet The Team”. Portrait/name/role order: Oluwafemi Adeleye — MD; Blessing Gbadeyan — Group Chief Operating Officer; Osasenaga Aigiomwan — Group Human Resources Manager; Anthonia Dike — Group Brand Manager; Christian Samuel — IT Support Executive; Joyce Osemudiamen — Company Secretary. Each title appears beneath its name. Role spelling/capitalization has been normalized.
 - Source portraits were copied unchanged to `public/assets/team/` with descriptive filenames; all six match the supplied files byte-for-byte and decode successfully. Next Image provides responsive sizing and optimized delivery; crops use CSS without altering faces or source photographs.
 - Layout: one column on mobile, two on tablet, four on desktop, with members five and six centered beneath in columns two and three. Reserved 4:5 portrait frames and caption areas keep the grid stable. Soft upward reveals and gold border emphasis hand off left to right after the prior 700ms entrance settles (860ms between starts).
 - Each next card waits for its portrait to load; an active image is promoted from lazy to eager loading to avoid a fast-scroll deadlock behind an offscreen predecessor. Load/error listeners and timers are removed on exit/unmount.
@@ -77,7 +83,7 @@ The original supplied ZIP remains intact in the project root. Existing unused le
 | Slide | Background | Official logo |
 | --- | --- | --- |
 | HQ | Dark navy CSS studio background, soft logo shadow; deliberately no storyboard image | `logos/adesa_hq.png` |
-| Media | `carousel/adesa_media-{960,1672}.webp`, edited from `02_adesa_media.png` | `logos/adesa_media.png` |
+| Media | `carousel/indrive-{960,1080}.webp`, optimized from the user-supplied `indrive.jpg`; original retained as `carousel/indrive-original.jpg` | `logos/adesa_media.png` |
 | Energy | `carousel/adesa_energy-{960,1672}.webp`, edited from `03_adesa_energy.png`, CNG canopy, pump and transport van | `logos/adesa_energy.png` |
 | Solutions | `carousel/adesa_solutions-{960,1672}.webp`, edited from `04_adesa_solutions.png`, architectural building | `logos/adesa_solutions.png` |
 | Distribution | `carousel/adesa_distribution-{960,1672}.webp`, edited from `05_adesa_distribution.png`, warehouse and forklift | `logos/adesa_distribution.png` |

@@ -11,7 +11,7 @@ const ASSETS = "/assets/adesa";
 const DURATION = 6800;
 const slides = [
   { id: "hq", name: "ADESA HQ", title: "Building African businesses that outlast cycles.", description: "A group committed to building, governing, and strengthening businesses for lasting impact.", cta: "Explore Our Group", href: "/structure", accent: "#bd881e" },
-  { id: "media", name: "ADESA Media", title: "Ideas that connect. Stories that influence.", description: "From strategic communications and brand development to digital campaigns, content production, and public relations, we bring brands closer to their audiences.", cta: "Visit ADESA Media", href: "https://adesamedia.com/", accent: "#00d8e8" },
+  { id: "media", background: "indrive", backgroundWidth: 1080, name: "ADESA Media", title: "Ideas that connect. Stories that influence.", description: "From strategic communications and brand development to digital campaigns, content production, and public relations, we bring brands closer to their audiences.", cta: "Visit ADESA Media", href: "https://adesamedia.com/", accent: "#00d8e8" },
   { id: "energy", name: "ADESA Energy", title: "Cleaner fuel. Lower cost. Greater impact.", description: "Driving sustainable mobility and energy solutions through Compressed Natural Gas (CNG) infrastructure, supply, and adoption for businesses and communities.", cta: "Visit ADESA Energy", href: "https://adesaenergy.com/", accent: "#ff8a1c" },
   { id: "solutions", name: "ADESA Solutions", title: "Designing spaces. Building possibilities.", description: "Delivering architectural and built-environment solutions, from design and planning to project execution and delivery.", cta: "Visit ADESA Solutions", href: ADESA_SOLUTIONS.href, accent: "#27b7ff" },
   { id: "distribution", name: "ADESA Distribution", title: "Connecting products, businesses and markets.", description: "A reliable distribution network that moves goods efficiently from suppliers to customers across key markets.", cta: "Visit ADESA Distribution", href: ADESA_DISTRIBUTION.href, accent: "#ffffff" },
@@ -79,13 +79,15 @@ export default function HeroSection() {
       }} onTouchCancel={() => { touch.current = null; }}>
       {slides.map((slide, index) => {
         const active = index === current;
+        const background = slide.background || `adesa_${slide.id}`;
+        const backgroundWidth = slide.backgroundWidth || 1672;
         return (
           <article key={slide.id} id={`hero-slide-${index}`} className={`${styles.slide} ${active ? styles.active : ""} ${index === 0 ? styles.hq : ""}`} style={{ "--accent": slide.accent }}
             role="group" aria-roledescription="slide" aria-label={`${index + 1} of 5: ${slide.name}`} aria-hidden={!active} inert={!active}>
-            {index !== 0 && <div className={styles.background} data-hero-background="true">
+            {index !== 0 && <div className={`${styles.background} ${slide.id === "media" ? styles.mediaBackground : ""}`} data-hero-background="true">
               <picture>
-                <source type="image/webp" srcSet={`${ASSETS}/carousel/adesa_${slide.id}-960.webp 960w, ${ASSETS}/carousel/adesa_${slide.id}-1672.webp 1672w`} sizes="100vw" />
-                <Image src={`${ASSETS}/carousel/adesa_${slide.id}-1672.webp`} alt="" fill sizes="100vw" loading="lazy" className={styles.photograph} />
+                <source type="image/webp" srcSet={`${ASSETS}/carousel/${background}-960.webp 960w, ${ASSETS}/carousel/${background}-${backgroundWidth}.webp ${backgroundWidth}w`} sizes="100vw" />
+                <Image src={`${ASSETS}/carousel/${background}-${backgroundWidth}.webp`} alt="" fill sizes="100vw" loading="lazy" className={styles.photograph} />
               </picture>
             </div>}
             <div className={`site-container ${styles.layout}`}>
