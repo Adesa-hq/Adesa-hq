@@ -2,18 +2,38 @@
 
 Implemented locally only. No deployment performed.
 
+## Team navigation
+
+- Desktop and mobile navigation now begin Home → Team → About. Team is a native button, not a fragment link, so clicking it on the homepage leaves the pathname, query and hash untouched.
+- From other pages, Team navigates to `/` with automatic top-scrolling disabled, waits for the homepage team heading if markup is still streaming, and then scrolls to that heading without adding a URL hash.
+- The mobile menu closes before the header offset is measured. The destination leaves 24px beneath the sticky header and receives programmatic focus via `tabIndex=-1`. Reduced motion uses instant scrolling.
+- Pending timers/DOM observers are cleaned up on cancellation, route changes and unmount. Normal navigation cancels a pending Team request.
+- Actual Header logic passed deterministic checks for nav order, URL/history-free same-page scrolling, mobile drawer timing, cross-page navigation/streaming, reduced motion and cancellation. Targeted lint and the production Webpack build passed (build-only Resend placeholder); browser visual checks remain unavailable here.
+
+## Latest Media image and secretary title
+
+- Joyce Osemudiamen is Group Secretary and remains last in the team sequence.
+- The Media hero uses the supplied WhatsApp Image 2026-11-11 at 10.22.13.jpeg. The source is unchanged, with responsive WebP variants under the unique media-event-41eb19f100 filename. Earlier inDrive/Leadway references below describe superseded backgrounds.
+
+## MD portrait and subsidiary positioning update
+
+- The MD now uses the latest supplied `WhatsApp Image 2026-11-11 at 10.21.39 (1).jpeg`, preserved unchanged as `public/assets/team/oluwafemi-adeleye-c26b3948d3.jpg`, replacing the earlier `md.jpg` selection. Its portrait framing matches the existing team card. The filename includes a content hash so browsers and the Next.js image optimizer request this latest image rather than reusing an earlier cached portrait. The previous low-resolution PNG remains as an unused source asset.
+- ADESA Energy is described as a CNG energy company advancing wider adoption of gas as a form of energy for mobility. Shared company data, hero copy, services, operating profile and SEO sector references have been updated; renewable power/solar/grid positioning has been removed.
+- ADESA Solutions is described as an engineering company serving construction, electrical and mechanical industries. Shared company data, hero headline/copy, services, operating profile and SEO sector references have been updated; the former business-systems and architectural-only positioning is superseded.
+- Existing links, logos, team order, card sizing and sequential reveals are retained.
+
 ## Latest Media photograph and team title update
 
 - Media now uses the supplied inDrive photograph, with its original JPG retained unchanged and responsive WebP variants generated at 960px/1080px. The portrait photograph occupies the right side on desktop with a soft gradient, and fills the slide on mobile. Existing Media copy, official logo, destination and carousel interactions are retained.
-- Joyce Osemudiamen is now Company Secretary and appears last. Current team sequence: Oluwafemi Adeleye, Blessing Gbadeyan, Osasenaga Aigiomwan, Anthonia Dike, Christian Samuel, Joyce Osemudiamen. The centered second row is IT followed by Company Secretary; reveals follow that reading order.
+- Joyce Osemudiamen is now Group Secretary and appears last. Current team sequence: Oluwafemi Adeleye, Blessing Gbadeyan, Osasenaga Aigiomwan, Anthonia Dike, Mercy Agbo, Christian Samuel, Joyce Osemudiamen. The centered second row is Finance, IT, then Group Secretary; reveals follow that reading order.
 - Historical Leadway/concept provenance below refers to the previous background; the active Media slide uses the newly supplied photo.
 
 ## Meet The Team
 
 - New `components/sections/team-section.jsx` and `team-section.module.css`, mounted on the homepage after Operating Companies and before the LinkedIn subscription section.
-- Exact heading: “Meet The Team”. Portrait/name/role order: Oluwafemi Adeleye — MD; Blessing Gbadeyan — Group Chief Operating Officer; Osasenaga Aigiomwan — Group Human Resources Manager; Anthonia Dike — Group Brand Manager; Christian Samuel — IT Support Executive; Joyce Osemudiamen — Company Secretary. Each title appears beneath its name. Role spelling/capitalization has been normalized.
-- Source portraits were copied unchanged to `public/assets/team/` with descriptive filenames; all six match the supplied files byte-for-byte and decode successfully. Next Image provides responsive sizing and optimized delivery; crops use CSS without altering faces or source photographs.
-- Layout: one column on mobile, two on tablet, four on desktop, with members five and six centered beneath in columns two and three. Reserved 4:5 portrait frames and caption areas keep the grid stable. Soft upward reveals and gold border emphasis hand off left to right after the prior 700ms entrance settles (860ms between starts).
+- Exact heading: “Meet The Team”. Portrait/name/role order: Oluwafemi Adeleye — Group Managing Director; Blessing Gbadeyan — Group Chief Operating Officer; Osasenaga Aigiomwan — Group Human Resources Manager; Anthonia Dike — Group Brand Manager; Mercy Agbo — Group Financial Officer; Christian Samuel — Group IT Support Executive / Software Engineer; Joyce Osemudiamen — Group Secretary. Each title appears beneath its name. Role spelling/capitalization has been normalized.
+- Source portraits were copied unchanged to `public/assets/team/` with descriptive filenames; all seven match the supplied files byte-for-byte and decode successfully. Next Image provides responsive sizing and optimized delivery; crops use CSS without altering faces or source photographs.
+- Layout: one column on mobile, two on tablet, four on desktop, with the remaining three cards centered beneath at the same size; the final tablet card is also centered. Reserved 4:5 portrait frames and caption areas keep the grid stable. Soft upward reveals and gold border emphasis hand off left to right after the prior 700ms entrance settles (860ms between starts).
 - Each next card waits for its portrait to load; an active image is promoted from lazy to eager loading to avoid a fast-scroll deadlock behind an offscreen predecessor. Load/error listeners and timers are removed on exit/unmount.
 - Replays follow the stats behavior: distinct full-section exit/re-entry, maximum five starts per visit, final readable content after the limit. Reduced motion shows all members immediately. No-JavaScript markup includes all names, titles and portraits.
 - Deterministic tests of the actual component effect passed for strict sequence order, five-play limit, image readiness, exit/unmount cleanup and reduced motion. Render-tree checks verified the heading and all names/titles in order. Lint and the production Webpack build passed (with the command-scoped Resend placeholder). The original four-member production homepage HTML was verified in the requested order; the two subsequent additions retain the same data-driven sequence. Browser visual checks remain blocked by the environment.
@@ -83,7 +103,7 @@ The original supplied ZIP remains intact in the project root. Existing unused le
 | Slide | Background | Official logo |
 | --- | --- | --- |
 | HQ | Dark navy CSS studio background, soft logo shadow; deliberately no storyboard image | `logos/adesa_hq.png` |
-| Media | `carousel/indrive-{960,1080}.webp`, optimized from the user-supplied `indrive.jpg`; original retained as `carousel/indrive-original.jpg` | `logos/adesa_media.png` |
+| Media | carousel/media-event-41eb19f100-{960,1080}.webp, optimized from the latest supplied event photograph; original retained as carousel/media-event-41eb19f100-original.jpeg | `logos/adesa_media.png` |
 | Energy | `carousel/adesa_energy-{960,1672}.webp`, edited from `03_adesa_energy.png`, CNG canopy, pump and transport van | `logos/adesa_energy.png` |
 | Solutions | `carousel/adesa_solutions-{960,1672}.webp`, edited from `04_adesa_solutions.png`, architectural building | `logos/adesa_solutions.png` |
 | Distribution | `carousel/adesa_distribution-{960,1672}.webp`, edited from `05_adesa_distribution.png`, warehouse and forklift | `logos/adesa_distribution.png` |

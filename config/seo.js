@@ -88,7 +88,7 @@ export const SEO_PAGES = {
       "ADESA operating companies",
     ],
     imageHeadline: "Operating companies across priority sectors",
-    imageSummary: "Media, renewable energy, business systems, and distribution across Africa.",
+    imageSummary: "Media, CNG energy for mobility, engineering, and distribution across Africa.",
     changeFrequency: "weekly",
     priority: 0.9,
   },

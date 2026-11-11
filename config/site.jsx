@@ -16,7 +16,7 @@ export const siteConfig = {
     "Builder-operator group",
     "Corporate governance Africa",
     "Investment and operations Nigeria",
-    "Business systems Africa",
+    "Engineering solutions Africa",
     "Subsidiaries in Africa",
   ],
   links: {

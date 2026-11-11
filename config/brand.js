@@ -26,46 +26,42 @@ export const ADESA_MEDIA = {
 
 export const ADESA_ENERGY = {
   name: "Adesa Energy",
-  sector: "Renewable Energy Solutions",
+  sector: "CNG Energy for Mobility",
   description:
-    "Focused on renewable power solutions and critical infrastructure development to support sustainable growth across African markets.",
+    "A CNG energy company advancing wider adoption of gas as a form of energy for mobility.",
   href: "https://www.adesaenergy.com/",
   careerHref: "https://www.adesaenergy.com/careers",
   image: "/assets/adesa/logos/adesa_energy.png",
   badge: "AE",
   services: [
-    "Solar Infrastructure",
-    "Grid Modernization",
-    "Energy Consulting",
-    "Sustainable Solutions",
+    "CNG Energy Solutions",
+    "Gas for Mobility",
+    "CNG Adoption",
   ],
   quickFacts: [
-    "Clean energy infrastructure builder",
-    "Focus on grid modernization",
-    "Sustainable power generation",
-    "Supports commercial & industrial sectors",
+    "CNG-focused energy company",
+    "Gas as an energy source for mobility",
+    "Advancing wider CNG adoption",
   ],
 };
 
 export const ADESA_SOLUTIONS = {
   name: "Adesa Solutions",
-  sector: "Business Systems & Operational Support",
+  sector: "Construction, Electrical & Mechanical Engineering",
   description:
-    "A solutions-led arm focused on practical systems, execution support, and operational problem solving across the ADESA group.",
+    "An engineering company serving the construction, electrical, and mechanical industries.",
   href: ADESA_INSTAGRAM_URL,
   image: "/assets/adesa/logos/adesa_solutions.png",
   badge: "AS",
   services: [
-    "Process Design",
-    "Implementation Support",
-    "Business Operations",
-    "Systems Advisory",
+    "Construction Engineering",
+    "Electrical Engineering",
+    "Mechanical Engineering",
   ],
   quickFacts: [
-    "Enterprise process engineering",
-    "Practical execution support",
-    "Optimizes group-wide resources",
-    "Business systems advisory",
+    "Engineering-led operating company",
+    "Construction industry expertise",
+    "Electrical and mechanical engineering focus",
   ],
 };
 

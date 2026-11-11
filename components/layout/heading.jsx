@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,6 +11,7 @@ import { ACTIVE_SUBSIDIARIES } from "@/config/brand";
 
 const navigation = [
   { name: "Home", href: "/" },
+  { name: "Team", section: "team-title" },
   { name: "About", href: "/about" },
   { name: "Group Structure", href: "/structure" },
   {
@@ -26,6 +27,8 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showSubsidiaries, setShowSubsidiaries] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const [teamRequested, setTeamRequested] = useState(false);
   const reduceMotion = useReducedMotion();
 
   useEffect(() => {
@@ -40,6 +43,51 @@ export function Header() {
     };
   }, [isMobileMenuOpen]);
 
+  function closeNavigation() {
+    setTeamRequested(false);
+    setIsMobileMenuOpen(false);
+  }
+
+  function showTeam() {
+    setIsMobileMenuOpen(false);
+    setTeamRequested(true);
+    if (pathname !== "/") router.push("/", { scroll: false });
+  }
+
+  useEffect(() => {
+    if (!teamRequested || pathname !== "/" || isMobileMenuOpen) return;
+    let observer;
+    let cancelled = false;
+
+    function scrollToTeam() {
+      if (cancelled) return false;
+      const title = document.getElementById("team-title");
+      if (!title) return false;
+      observer?.disconnect();
+      const headerHeight = document.querySelector("header")?.getBoundingClientRect().height || 0;
+      const top = Math.max(0, title.getBoundingClientRect().top + window.scrollY - headerHeight - 24);
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      title.focus({ preventScroll: true });
+      window.scrollTo({ top, behavior: reduced ? "instant" : "smooth" });
+      setTeamRequested(false);
+      return true;
+    }
+
+    // Allow the mobile drawer's exit animation to finish before measuring the header.
+    const timer = window.setTimeout(() => {
+      if (scrollToTeam()) return;
+      // App Router may still be streaming the homepage after navigation from another page.
+      observer = new MutationObserver(scrollToTeam);
+      observer.observe(document.getElementById("main-content") || document.body, { childList: true, subtree: true });
+    }, 260);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      observer?.disconnect();
+    };
+  }, [teamRequested, pathname, isMobileMenuOpen]);
+
   return (
     <header
       className="sticky top-0 shrink-0 bg-adesa-950/95 px-5 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))] backdrop-blur-xl sm:px-8"
@@ -47,7 +95,7 @@ export function Header() {
     >
       <div className="adesa-shell-surface mx-auto max-w-[82rem] rounded-2xl">
         <nav className="flex h-16 items-center justify-between gap-4 px-3 sm:px-5" aria-label="Main navigation">
-          <Link href="/" className="group flex min-w-0 items-center gap-3" aria-label="ADESA HQ home">
+          <Link href="/" className="group flex min-w-0 items-center gap-3" aria-label="ADESA HQ home" onClick={closeNavigation}>
             <Logo variant="secondary" width={42} height={42} priority />
             <span className="min-w-0 font-serif text-lg font-medium text-adesa-50 sm:text-xl">
               ADESA <span className="font-sans text-xs font-semibold tracking-[0.18em] text-gold-400">HQ</span>
@@ -57,17 +105,24 @@ export function Header() {
           <ul className="hidden items-center gap-4 lg:flex xl:gap-7">
             {navigation.map((item) => (
               <li key={item.name} className="group relative">
-                <Link
-                  href={item.href}
-                  aria-current={pathname === item.href ? "page" : undefined}
-                  className={cn(
-                    "flex h-11 items-center gap-1 whitespace-nowrap text-xs font-semibold text-adesa-200 transition-colors duration-200 hover:text-adesa-50",
-                    (pathname === item.href || pathname.startsWith(`${item.href}/`)) && "text-gold-300",
-                  )}
-                >
-                  {item.name}
-                  {item.children && <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />}
-                </Link>
+                {item.section ? (
+                  <button type="button" onClick={showTeam} className="flex h-11 cursor-pointer items-center whitespace-nowrap text-xs font-semibold text-adesa-200 transition-colors duration-200 hover:text-gold-300">
+                    {item.name}
+                  </button>
+                ) : (
+                  <Link
+                    href={item.href}
+                    onClick={closeNavigation}
+                    aria-current={pathname === item.href ? "page" : undefined}
+                    className={cn(
+                      "flex h-11 items-center gap-1 whitespace-nowrap text-xs font-semibold text-adesa-200 transition-colors duration-200 hover:text-adesa-50",
+                      (pathname === item.href || pathname.startsWith(`${item.href}/`)) && "text-gold-300",
+                    )}
+                  >
+                    {item.name}
+                    {item.children && <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />}
+                  </Link>
+                )}
 
                 {item.children && (
                   <ul className="invisible absolute left-1/2 top-full w-64 -translate-x-1/2 translate-y-1 rounded-xl border border-white/10 bg-adesa-900 p-2 opacity-0 shadow-[0_18px_50px_rgba(1,5,14,0.45)] transition-[opacity,transform,visibility] duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
@@ -75,6 +130,7 @@ export function Header() {
                       <li key={child.name}>
                         <Link
                           href={child.href}
+                          onClick={closeNavigation}
                           target={child.href.startsWith("http") ? "_blank" : undefined}
                           rel={child.href.startsWith("http") ? "noreferrer" : undefined}
                           className="block rounded-lg px-3 py-2.5 text-sm text-adesa-200 transition-colors duration-200 hover:bg-white/5 hover:text-gold-300"
@@ -91,6 +147,7 @@ export function Header() {
 
           <Link
             href="/contact"
+            onClick={closeNavigation}
             className="hidden min-h-10 items-center gap-2 whitespace-nowrap rounded-full bg-gold-400 px-5 text-xs font-semibold text-adesa-950 transition-[background-color,transform] duration-150 hover:bg-gold-300 active:translate-y-px lg:inline-flex"
           >
             Contact HQ
@@ -125,17 +182,23 @@ export function Header() {
               {navigation.map((item) => (
                 <li key={item.name} className="border-b border-white/8 last:border-0">
                   <div className="flex items-center">
-                    <Link
-                      href={item.href}
-                      aria-current={pathname === item.href ? "page" : undefined}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={cn(
-                        "flex min-h-14 flex-1 items-center text-base font-medium text-adesa-100",
-                        pathname === item.href && "text-gold-300",
-                      )}
-                    >
-                      {item.name}
-                    </Link>
+                    {item.section ? (
+                      <button type="button" onClick={showTeam} className="flex min-h-14 flex-1 cursor-pointer items-center text-left text-base font-medium text-adesa-100 hover:text-gold-300">
+                        {item.name}
+                      </button>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        aria-current={pathname === item.href ? "page" : undefined}
+                        onClick={closeNavigation}
+                        className={cn(
+                          "flex min-h-14 flex-1 items-center text-base font-medium text-adesa-100",
+                          pathname === item.href && "text-gold-300",
+                        )}
+                      >
+                        {item.name}
+                      </Link>
+                    )}
                     {item.children && (
                       <button
                         type="button"
@@ -154,7 +217,7 @@ export function Header() {
                         <li key={child.name}>
                           <Link
                             href={child.href}
-                            onClick={() => setIsMobileMenuOpen(false)}
+                            onClick={closeNavigation}
                             target={child.href.startsWith("http") ? "_blank" : undefined}
                             rel={child.href.startsWith("http") ? "noreferrer" : undefined}
                             className="flex min-h-11 items-center text-sm text-adesa-300 hover:text-gold-300"
@@ -170,7 +233,7 @@ export function Header() {
             </ul>
             <Link
               href="/contact"
-              onClick={() => setIsMobileMenuOpen(false)}
+              onClick={closeNavigation}
               className="mt-5 flex min-h-12 items-center justify-center rounded-full bg-gold-400 px-6 text-sm font-semibold text-adesa-950"
             >
               Contact HQ

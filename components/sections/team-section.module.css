@@ -21,7 +21,14 @@
 }
 
 @media (min-width: 1024px) {
-  /* Keep the final two cards the same size, centered under the first four. */
-  .member:nth-child(5) { grid-column-start: 2; }
-  .member:nth-child(6) { grid-column-start: 3; }
+  /* Four equal cards per desktop row; incomplete rows are centered by the parent. */
+  .member { flex: 0 1 calc((100% - 4.5rem) / 4); }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .member:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    width: calc((100% - 1.5rem) / 2);
+    justify-self: center;
+  }
 }

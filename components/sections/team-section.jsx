@@ -8,12 +8,13 @@ import styles from "./team-section.module.css";
 const MAX_PLAYS = 5;
 const REVEAL_AND_HOLD_MS = 860;
 const team = [
-  { id: "oluwafemi-adeleye", name: "Oluwafemi Adeleye", title: "MD", image: "/assets/team/oluwafemi-adeleye.png", position: "50% 25%" },
+  { id: "oluwafemi-adeleye", name: "Oluwafemi Adeleye", title: "Group Managing Director", image: "/assets/team/oluwafemi-adeleye-c26b3948d3.jpg", position: "50% 25%" },
   { id: "blessing-gbadeyan", name: "Blessing Gbadeyan", title: "Group Chief Operating Officer", image: "/assets/team/blessing-gbadeyan.png", position: "50% 25%" },
   { id: "osasenaga-aigiomwan", name: "Osasenaga Aigiomwan", title: "Group Human Resources Manager", image: "/assets/team/osasenaga-aigiomwan.jpg", position: "50% 20%" },
   { id: "anthonia-dike", name: "Anthonia Dike", title: "Group Brand Manager", image: "/assets/team/anthonia-dike.jpg", position: "50% 20%" },
-  { id: "christian-samuel", name: "Christian Samuel", title: "IT Support Executive", image: "/assets/team/christian-samuel.png", position: "50% 22%" },
-  { id: "joyce-osemudiamen", name: "Joyce Osemudiamen", title: "Company Secretary", image: "/assets/team/joyce-osemudiamen.jpg", position: "50% 25%" },
+  { id: "mercy-agbo", name: "Mercy Agbo", title: "Group Financial Officer", image: "/assets/team/mercy-agbo.jpg", position: "50% 25%" },
+  { id: "christian-samuel", name: "Christian Samuel", title: "Group IT Support Executive / Software Engineer", image: "/assets/team/christian-samuel.png", position: "50% 22%" },
+  { id: "joyce-osemudiamen", name: "Joyce Osemudiamen", title: "Group Secretary", image: "/assets/team/joyce-osemudiamen.jpg", position: "50% 25%" },
 ];
 
 export default function TeamSection() {
@@ -140,9 +141,9 @@ export default function TeamSection() {
       <div className="site-container section-space">
         <MotionReveal>
           <p className="mb-4 text-xs font-semibold tracking-[0.18em] text-gold-300">OUR PEOPLE</p>
-          <h2 id="team-title" className="text-4xl font-medium leading-[1.06] tracking-[-0.04em] text-adesa-50 sm:text-5xl lg:text-6xl">Meet The Team</h2>
+          <h2 id="team-title" tabIndex={-1} className="text-4xl font-medium leading-[1.06] tracking-[-0.04em] text-adesa-50 sm:text-5xl lg:text-6xl">Meet The Team</h2>
         </MotionReveal>
-        <ul className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:flex lg:flex-wrap lg:justify-center">
           {team.map((member) => (
             <li key={member.id} data-team-member className={styles.member}>
               <article aria-labelledby={`${member.id}-name`} className={styles.card}>
